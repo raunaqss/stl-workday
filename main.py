@@ -1,9 +1,9 @@
-import webapp2
+#!/usr/bin/env python
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Hello, World!')
+
+import webapp2
+from handlers import *
+
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
