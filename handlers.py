@@ -26,7 +26,12 @@ class Handler(webapp2.RequestHandler):
 
 
 class MainPage(webapp2.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Hello, World!')
 
+    def get(self):
+        self.redirect('/login')
+
+
+class LoginHandler(Handler):
+
+	def get(self):
+		self.render_template('login.html')

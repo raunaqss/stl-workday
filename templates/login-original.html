@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/">
+				<h1 class="no-margin">STL Workday</h1>
+			</a>
+		</div>
+		<form class="navbar-form navbar-right" role="login">
+			<div class="form-group">
+				<label for="InputEmail">Email</label>
+				<input type="email" class="form-control" id="InputEmail" placeholder="name@spacecom.in" />
+			</div>
+			<div class="form-group">
+				<label for="InputPassword">Password</label>
+				<input type="password" class="form-control" id="InputPassword" placeholder="******" />
+			</div>
+			<button type="submit" class="btn btn-default navbar-btn">Sign In</button>
+		</form>
+	</div>
+</nav>
+<div class="container">
+<!-- 	<div class="row">
+		<div class="col-md-6">
+			<h1 class="text-capitalize">STL workday</h1>
+		</div>
+		<div class="col-md-6">
+			<div class="vertical-middle">
+			<form class="form-inline">
+				<div class="form-group">
+					<label for="InputEmail">Email</label>
+					<input type="email" class="form-control" id="InputEmail" placeholder="name@spacecom.in" />
+				</div>
+				<div class="form-group">
+					<label for="InputPassword">Password</label>
+					<input type="password" class="form-control" id="InputPassword" placeholder="******" />
+				</div>
+				<button type="submit" class="btn btn-default">Sign In</button>
+			</form>
+			</div>
+		</div>
+	</div> -->
+
+<!-- 	<div class="row">
+		<div class="col-md-12">
+			<hr />
+		</div>
+	</div> -->
+
+	<div class="row">
+		<div class="col-md-6">
+			<h2>Here are some great articles that talk about the benefits of maintaing a Done List:</h2>
+			<ul class="list-group">
+				<li class="list-group-item">
+					<a href="http://99u.com/articles/24875/the-art-of-the-done-list-harnessing-the-power-of-progress">
+						The Art of the Done List: Harnessing the Power of Progress - 99U
+					</a>
+				</li>
+				<li class="list-group-item">
+					<a href="http://www.lifehack.org/articles/productivity/why-to-do-lists-dont-work-and-done-lists-do.html">
+						Why To-Do Lists Don’t Work and Done Lists Do - LifeHacker
+					</a>
+				</li>
+				<li class="list-group-item">
+					<a href="http://www.inc.com/jessica-stillman/trade-your-to-do-list-for-a-done-list.html">
+						Trade Your To-Do List for a Done List - Inc
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Sign Up</h3>
+				</div>
+				<div class="panel-body">
+					<form>
+						<div class="form-group">
+							<label for="InputName">Full Name</label>
+							<input type="name" class="form-control" id="InputName" placeholder="Enter Full Name" />
+						</div>
+						<div class="form-group">
+							<label for="InputEmailAddress">Email Address</label>
+							<input type="email" class="form-control" id="InputEmailAddress" placeholder="Enter Email" />
+						</div>
+						<div class="form-group">
+							<label for="InputNewPassword">Password</label>
+							<input type="password" class="form-control" id="InputNewPassword" placeholder="Password" />
+						</div>
+						<div class="form-group">
+							<label for="InputFile">Profile Picture</label>
+							<input type="file" id="InputFile" />
+						</div>
+						<button type="submit" class="btn btn-default">Sign Up</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
