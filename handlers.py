@@ -25,13 +25,13 @@ class Handler(webapp2.RequestHandler):
 		self.write(self.render_str(template, **params))
 
 
-class MainPage(webapp2.RequestHandler):
+class MainPage(Handler):
 
     def get(self):
-        self.redirect('/login')
+        self.render_template('login.html')
 
 
 class LoginHandler(Handler):
 
 	def get(self):
-		self.render_template('login.html')
+		self.redirect('/')
