@@ -7,16 +7,16 @@
 				<h1 class="no-margin">STL Workday</h1>
 			</a>
 		</div>
-		<form class="navbar-form navbar-right" role="login">
+		<form method="post" class="navbar-form navbar-right" role="login">
 			<div class="form-group">
 				<label for="InputEmail">Email</label>
-				<input type="email" class="form-control" id="InputEmail" placeholder="name@spacecom.in" />
+				<input type="email" name="email" value="{{email}}" class="form-control" id="InputEmail" placeholder="name@spacecom.in" />
 			</div>
 			<div class="form-group">
 				<label for="InputPassword">Password</label>
-				<input type="password" class="form-control" id="InputPassword" placeholder="******" />
+				<input type="password" name="password" class="form-control" id="InputPassword" placeholder="******" />
 			</div>
-			<button type="submit" class="btn btn-default navbar-btn">Sign In</button>
+			<input type="submit" name="signin" value="Sign In" class="btn btn-default navbar-btn" />
 		</form>
 	</div>
 </nav>
@@ -48,25 +48,60 @@
 				<div class="panel-body">
 					<h2 class="no-margin">Sign Up</h2>
 					<hr />
-					<form>
+					<form method="post" enctype="multipart/form-data">
 						<div class="form-group">
-							<label for="InputName">Full Name</label>
-							<input type="name" class="form-control" id="InputName" placeholder="Enter Full Name" />
+							<label for="InputName">Username</label>
+							<input type="name" name="username" value="{{username}}" class="form-control" id="InputName" placeholder="Enter Username" />
 						</div>
+						{% if username_error %}
+							<div class="alert alert-danger" role="alert">
+	  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  							<span class="sr-only">Error:</span>
+	  							{{username_error}}
+							</div>
+						{% endif %}
 						<div class="form-group">
 							<label for="InputEmailAddress">Email Address</label>
-							<input type="email" class="form-control" id="InputEmailAddress" placeholder="Enter Email" />
+							<input type="email" name="email" value="{{email}}" class="form-control" id="InputEmailAddress" placeholder="Enter Email" />
 						</div>
+						{% if email_error %}
+							<div class="alert alert-danger" role="alert">
+	  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  							<span class="sr-only">Error:</span>
+	  							{{email_error}}
+							</div>
+						{% endif %}
 						<div class="form-group">
 							<label for="InputNewPassword">Password</label>
-							<input type="password" class="form-control" id="InputNewPassword" placeholder="Password" />
+							<input type="password" name="password" class="form-control" id="InputNewPassword" placeholder="Password" />
 						</div>
+						{% if password_error %}
+							<div class="alert alert-danger" role="alert">
+	  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  							<span class="sr-only">Error:</span>
+	  							{{password_error}}
+							</div>
+						{% endif %}
 						<div class="form-group">
 							<label for="InputFile">Profile Picture</label>
-							<input type="file" id="InputFile" />
+							<input type="file" name="profile_picture" id="InputFile" />
 						</div>
-						<button type="submit" class="btn btn-default">Sign Up</button>
+						{% if profile_picture_error %}
+							<div class="alert alert-danger" role="alert">
+	  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  							<span class="sr-only">Error:</span>
+	  							{{profile_picture_error}}
+							</div>
+						{% endif %}
+						<input type="submit" name="signup" value="Sign Up" class="btn btn-default" />
 					</form>
+					{% if signup_error %}
+						<div class="alert alert-danger alert-margin-top" role="alert">
+	  						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  						<span class="sr-only">Error:</span>
+	  						{{signup_error}}
+						</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>

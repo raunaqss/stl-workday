@@ -1,7 +1,10 @@
 import datetime
 import jinja2
+import logging
 import os
 import webapp2
+
+from utils import *
 
 from google.appengine.ext import db
 
@@ -27,8 +30,51 @@ class Handler(webapp2.RequestHandler):
 
 class MainPage(Handler):
 
-    def get(self):
-        self.render_template('login.html')
+	def write_login_form(self, email = "",
+							   username = "",
+							   email_error = "",
+							   username_error = "",
+							   password_error = "",
+							   signup_error = "",
+							   profile_picture_error = ""):
+		self.render_template('login.html', email = email,
+								username = username,
+								email_error = email_error,
+								username_error = username_error,
+								password_error = password_error,
+								signup_error = signup_error,
+								profile_picture_error = profile_picture_error)
+
+	def get(self):
+		self.write_login_form()
+
+	def post(self):
+		signin = self.request.get('signin')
+		signup = self.request.get('signup')
+		logging.error('signin = ' + signin)
+		logging.error('signup = ' + signup)
+		if signin:
+			self.write_login_form()
+		elif signup:
+			username = self.request.get('username')
+			email = self.request.get('email')
+			password = self.request.get('password')
+			profile_picture = self.request.get('profile_picture')
+			valid_entries, all_errors = validate_signup(username,
+														email,
+														password,
+														profile_picture)
+			if not valid_entries:
+				self.write_login_form(
+					email = email,
+					username = username,
+					email_error = all_errors['email_error'],
+					username_error = all_errors['username_error'],
+					password_error = all_errors['password_error'],
+					signup_error = all_errors['signup_error'],
+					profile_picture_error = all_errors['profile_picture_error']
+					)
+
 
 
 class LoginHandler(Handler):

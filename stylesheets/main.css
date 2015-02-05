@@ -11,3 +11,8 @@
 .no-margin {
 	margin: 0;
 }
+
+.alert-margin-top {
+	margin-top: 15px;
+}
+
