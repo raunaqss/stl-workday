@@ -9,12 +9,12 @@
 		</div>
 		<form method="post" class="navbar-form navbar-right" role="login">
 			<div class="form-group">
-				<label for="InputEmail">Email</label>
-				<input type="email" name="email" value="{{email}}" class="form-control" id="InputEmail" placeholder="name@spacecom.in" />
+				<label for="InputEmail" class="sr-only">Email</label>
+				<input type="email" name="email" value="{{email}}" class="form-control" id="InputEmail" placeholder="Email" />
 			</div>
 			<div class="form-group">
-				<label for="InputPassword">Password</label>
-				<input type="password" name="password" class="form-control" id="InputPassword" placeholder="******" />
+				<label for="InputPassword" class="sr-only">Password</label>
+				<input type="password" name="password" class="form-control" id="InputPassword" placeholder="Password" />
 			</div>
 			<input type="submit" name="signin" value="Sign In" class="btn btn-default navbar-btn" />
 		</form>
@@ -27,17 +27,17 @@
 			<h2>Here are some great articles that talk about the benefits of maintaing a Done List:</h2>
 			<ul class="list-group">
 				<li class="list-group-item">
-					<a href="http://99u.com/articles/24875/the-art-of-the-done-list-harnessing-the-power-of-progress">
+					<a href="http://99u.com/articles/24875/the-art-of-the-done-list-harnessing-the-power-of-progress" target="_blank">
 						The Art of the Done List: Harnessing the Power of Progress - 99U
 					</a>
 				</li>
 				<li class="list-group-item">
-					<a href="http://www.lifehack.org/articles/productivity/why-to-do-lists-dont-work-and-done-lists-do.html">
+					<a href="http://www.lifehack.org/articles/productivity/why-to-do-lists-dont-work-and-done-lists-do.html" target="_blank">
 						Why To-Do Lists Don’t Work and Done Lists Do - LifeHacker
 					</a>
 				</li>
 				<li class="list-group-item">
-					<a href="http://www.inc.com/jessica-stillman/trade-your-to-do-list-for-a-done-list.html">
+					<a href="http://www.inc.com/jessica-stillman/trade-your-to-do-list-for-a-done-list.html" target="_blank">
 						Trade Your To-Do List for a Done List - Inc
 					</a>
 				</li>
@@ -54,7 +54,7 @@
 							<input type="name" name="username" value="{{username}}" class="form-control" id="InputName" placeholder="Enter Username" />
 						</div>
 						{% if username_error %}
-							<div class="alert alert-danger" role="alert">
+							<div class="alert alert-danger alert-padding" role="alert">
 	  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 	  							<span class="sr-only">Error:</span>
 	  							{{username_error}}
@@ -65,7 +65,7 @@
 							<input type="email" name="email" value="{{email}}" class="form-control" id="InputEmailAddress" placeholder="Enter Email" />
 						</div>
 						{% if email_error %}
-							<div class="alert alert-danger" role="alert">
+							<div class="alert alert-danger alert-padding" role="alert">
 	  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 	  							<span class="sr-only">Error:</span>
 	  							{{email_error}}
@@ -76,7 +76,7 @@
 							<input type="password" name="password" class="form-control" id="InputNewPassword" placeholder="Password" />
 						</div>
 						{% if password_error %}
-							<div class="alert alert-danger" role="alert">
+							<div class="alert alert-danger alert-padding" role="alert">
 	  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 	  							<span class="sr-only">Error:</span>
 	  							{{password_error}}
@@ -87,7 +87,7 @@
 							<input type="file" name="profile_picture" id="InputFile" />
 						</div>
 						{% if profile_picture_error %}
-							<div class="alert alert-danger" role="alert">
+							<div class="alert alert-danger alert-padding" role="alert">
 	  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 	  							<span class="sr-only">Error:</span>
 	  							{{profile_picture_error}}
@@ -96,7 +96,7 @@
 						<input type="submit" name="signup" value="Sign Up" class="btn btn-default" />
 					</form>
 					{% if signup_error %}
-						<div class="alert alert-danger alert-margin-top" role="alert">
+						<div class="alert alert-danger alert-margin-top alert-padding" role="alert">
 	  						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 	  						<span class="sr-only">Error:</span>
 	  						{{signup_error}}
