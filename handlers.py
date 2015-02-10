@@ -33,23 +33,18 @@ class MainPage(Handler):
 	def write_login_form(self, email = "",
 							   username = "",
 							   fullname = "",
-							   email_error = "",
-							   username_error = "",
-							   fullname_error = "",
-							   password_error = "",
-							   signup_error = "",
-							   profile_picture_error = ""):
+							   all_errors  = {"username_error": "",
+				   							  "password_error": "",
+				   							  "signup_error": "",
+				   							  "email_error": "",
+				   							  "fullname_error": "",
+				     						  "profile_picture_error": ""}):
 
 		self.render_template('login.html', 
 							 email = email,
 							 username = username,
 							 fullname = fullname,
-							 email_error = email_error,
-							 username_error = username_error,
-							 fullname_error = fullname_error,
-							 password_error = password_error,
-							 signup_error = signup_error,
-							 profile_picture_error = profile_picture_error)
+							 all_errors = all_errors)
 
 	def get(self):
 		self.write_login_form()
@@ -73,17 +68,10 @@ class MainPage(Handler):
 														password,
 														profile_picture)
 			if not valid_entries:
-				self.write_login_form(
-					email = email,
-					username = username,
-					fullname = fullname,
-					email_error = all_errors['email_error'],
-					username_error = all_errors['username_error'],
-					fullname_error = all_errors['fullname_error'],
-					password_error = all_errors['password_error'],
-					signup_error = all_errors['signup_error'],
-					profile_picture_error = all_errors['profile_picture_error']
-					)
+				self.write_login_form(email = email,
+									  username = username,
+									  fullname = fullname,
+									  all_errors = all_errors)
 
 
 class LoginHandler(Handler):
