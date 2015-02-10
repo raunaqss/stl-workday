@@ -72,6 +72,17 @@
 							</div>
 						{% endif %}
 						<div class="form-group">
+							<label for="InputFullName">Full Name</label>
+							<input type="name" name="fullname" value="{{fullname}}" class="form-control" id="InputName" placeholder="Enter Full Name" />
+						</div>
+						{% if fullname_error %}
+							<div class="alert alert-danger alert-padding" role="alert">
+	  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  							<span class="sr-only">Error:</span>
+	  							{{fullname_error}}
+							</div>
+						{% endif %}
+						<div class="form-group">
 							<label for="InputNewPassword">Password</label>
 							<input type="password" name="password" class="form-control" id="InputNewPassword" placeholder="Password" />
 						</div>
