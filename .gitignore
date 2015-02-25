@@ -53,4 +53,7 @@ docs/_build/
 # PyBuilder
 target/
 
+# This holds the secret for hashing user ids for making secure cookies.
+secret.py
+
 ## Source: https://github.com/github/gitignore/blob/master/Python.gitignore
