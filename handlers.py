@@ -109,7 +109,9 @@ class MainPage(ParentHandler):
 		if not self.logged_in_user:
 			self.write_login_form()
 		else:
-			self.write('Welcome, ' + self.logged_in_user.username + '!')
+			self.render_template('dashboard.html',
+								 now = timezone_now().strftime('%a %d %b %Y'),
+								 user = self.logged_in_user)
 
 	def post(self):
 		signin = self.request.get('signin')
@@ -169,7 +171,14 @@ class MainPage(ParentHandler):
 					self.redirect('/')
 
 
+
 class LoginHandler(ParentHandler):
 
 	def get(self):
 		self.write('Okay, thank god.')
+
+class SignoutHandler(ParentHandler):
+
+	def get(self):
+		self.logout()
+		self.redirect('/')
