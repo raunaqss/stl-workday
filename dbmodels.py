@@ -129,3 +129,49 @@ class User(db.Model):
 		set_cache(self.username, self)
 		set_cache(str(self.key().id()), self)
 		set_cache(self.email, self)
+
+
+class DoneList(db.Model):
+	"""Datastore entity for each item in the Done List."""
+
+	tasks = db.ListProperty(db.Text)
+	user_id = db.IntegerProperty()
+	tz_date = db.DateProperty()
+	company = db.StringProperty(default = DEFAULT_COMPANY)
+
+	@classmethod
+	def get_done_list(cls, user, tz_date):
+		"""
+		This decorator will first check the cache.
+		If not found in cache, call DB query and set the cache.
+		"""
+		done_list = memcache.get(make_cache_key(user.key().id(), tz_date))
+		if not done_list:
+			done_list = cls.by_user_n_date(user, tz_date)
+		return done_list
+
+	@classmethod
+	def by_user_n_date(cls, user, tz_date):
+		"""This decorator is a DB Query."""
+		done_task = cls.all().ancestor(user)
+		done_task.filter("user_id = ", user.key().id())
+		done_task.filter("tz_date = ", tz_date)
+
+		return done_task.get()
+
+	@classmethod
+	def construct(cls, task, user):
+		"""Constructs the DoneList and returns it without putting it."""
+		return cls(parent = user,
+				   tasks = [db.Text(task)],
+				   user_id = user.key().id(),
+				   tz_date = timezone_now().date())
+
+	def update(self, task):
+		"""Updates itself with the given task without putting it to the db."""
+		self.tasks.append(db.Text(task))
+		return self
+
+	def set_done_list_cache(self):
+		set_cache(make_cache_key(self.user_id, self.tz_date), self)
+

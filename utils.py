@@ -6,9 +6,29 @@ import random
 import re
 import string
 
-from pytz.gae import pytz
+from google.appengine.ext import db
 from google.appengine.api import memcache
+from pytz.gae import pytz
 from secret import *
+
+
+def make_cache_key(user_id, date_object):
+	return str(user_id) + '_' + date_string(date_object)
+
+
+def date_string(date_object):
+	return date_object.strftime('%a %d %b %Y')
+
+
+def timezone_now(timezone = 'Asia/Kolkata'):
+	pytz_timezone = pytz.timezone(timezone)
+	return pytz_timezone.normalize(aware_utcnow().astimezone(pytz_timezone))
+
+
+def aware_utcnow():
+	"""Get aware utcnow to store it in the date_createrd property."""
+	return datetime.datetime.utcnow().replace(tzinfo = pytz.UTC)
+
 
 def what_attribute(uid_or_username_or_email):
 	"""
@@ -21,6 +41,7 @@ def what_attribute(uid_or_username_or_email):
 		return 'email'
 	else:
 		return 'username'
+
 
 def set_cache(cache_key, value):
 	"""
@@ -48,11 +69,6 @@ def make_salt():
 	Returns: String
 	"""
 	return ''.join(random.choice(string.letters) for x in xrange(5))
-
-
-def aware_utcnow():
-	"""Get aware utcnow to store it in the date_createrd property."""
-	return datetime.datetime.utcnow().replace(tzinfo = pytz.UTC)
 
 
 def make_pw_hash(name, pw, salt = make_salt()):
