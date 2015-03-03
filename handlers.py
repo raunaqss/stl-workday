@@ -110,7 +110,7 @@ class MainPage(ParentHandler):
 			self.write_login_form()
 		else:
 			self.render_template('dashboard.html',
-								 now = timezone_now().strftime('%a %d %b %Y'),
+								 now = date_string(timezone_now()),
 								 user = self.logged_in_user)
 
 	def post(self):
