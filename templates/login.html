@@ -16,7 +16,7 @@
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    	<form method="post" class="form-inline navbar-form navbar-right" role="login">
+    	<form method="post" class="form-inline navbar-form navbar-right" role="login" action="/login">
 			<div class="form-group">
 				<label for="InputEmail" class="sr-only">Email</label>
 				<input type="email" name="username_or_email" value="{{ email }}" class="form-control" id="InputEmail" placeholder="Email or Username" />
@@ -57,7 +57,7 @@
 				<div class="panel-body">
 					<h2 class="no-margin">Sign Up</h2>
 					<hr />
-					<form method="post" enctype="multipart/form-data">
+					<form method="post" enctype="multipart/form-data" action="/signup">
 						<div class="form-group">
 							<label for="InputName">Username</label>
 							<input type="name" name="username" value="{{ username }}" class="form-control" id="InputName" placeholder="Enter Username" />

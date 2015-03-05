@@ -114,68 +114,91 @@ class MainPage(ParentHandler):
 								 user = self.logged_in_user)
 
 	def post(self):
-		signin = self.request.get('signin')
-		signup = self.request.get('signup')
-		logging.error('signin = ' + signin)
-		logging.error('signup = ' + signup)
-		if signin:
-			username_or_email = self.request.get('username_or_email')
-			password = self.request.get('password')
-			user = User.valid_login(username_or_email, password)
-			if user:
-				self.login(user)
-				self.redirect('/')
-			else:
-				self.redirect('/login')
-		elif signup:
-			username = self.request.get('username')
-			email = self.request.get('email')
-			fullname = self.request.get('fullname')
-			password = self.request.get('password')
-			profile_picture = self.request.get('profile_picture')
-			valid_entries, all_errors = validate_signup(username,
-														email,
-														fullname,
-														password,
-														profile_picture)
-			if not valid_entries:
-				self.write_login_form(email = email,
-									  username = username,
-									  fullname = fullname,
-									  all_errors = all_errors)
-			else:
-				existing_user = User.get_user(email)
-				taken_username = User.get_user(username)
-				if existing_user or taken_username:
-					if existing_user:
-						all_errors[
-						'email_error'
-						] = "This email has already been registered."
-					if taken_username:
-						all_errors[
-						'username_error'
-						] = "This username is already taken."
-					self.write_login_form(email = email,
-										  username = username,
-										  fullname = fullname,
-										  all_errors = all_errors)
-				else:
-					new_user = User.register(username,
-											 email,
-											 fullname,
-											 password,
-											 profile_picture)
-					new_user.put()
-					new_user.set_user_caches()
-					self.login(new_user)
-					self.redirect('/')
+		pass
 
 
 
 class LoginHandler(ParentHandler):
 
 	def get(self):
-		self.write('Okay, thank god.')
+		self.redirect('/')
+
+	def post(self):
+		username_or_email = self.request.get('username_or_email')
+		password = self.request.get('password')
+		user = User.valid_login(username_or_email, password)
+		if user:
+			self.login(user)
+			self.redirect('/')
+		else:
+			self.redirect('/') # this is temporary
+
+
+class SignupHandler(ParentHandler):
+
+	def write_login_form(self, email = "",
+							   username = "",
+							   fullname = "",
+							   all_errors  = {"username_error": "",
+				   							  "password_error": "",
+				   							  "signup_error": "",
+				   							  "email_error": "",
+				   							  "fullname_error": "",
+				     						  "profile_picture_error": ""}):
+
+		self.render_template('login.html', 
+							 email = email,
+							 username = username,
+							 fullname = fullname,
+							 all_errors = all_errors)
+
+	def get(self):
+		self.redirect('/')
+
+	def post(self):
+		username = self.request.get('username')
+		email = self.request.get('email')
+		fullname = self.request.get('fullname')
+		password = self.request.get('password')
+		profile_picture = self.request.get('profile_picture')
+		valid_entries, all_errors = validate_signup(username,
+													email,
+													fullname,
+													password,
+													profile_picture)
+		if not valid_entries:
+			self.write_login_form(email = email,
+								  username = username,
+								  fullname = fullname,
+								  all_errors = all_errors)
+		else:
+			existing_user = User.get_user(email)
+			taken_username = User.get_user(username)
+			if existing_user or taken_username:
+				if existing_user:
+					all_errors[
+					'email_error'
+					] = "This email has already been registered."
+				if taken_username:
+					all_errors[
+					'username_error'
+					] = "This username is already taken."
+				self.write_login_form(email = email,
+									  username = username,
+									  fullname = fullname,
+									  all_errors = all_errors)
+			else:
+				new_user = User.register(username,
+										 email,
+										 fullname,
+										 password,
+										 profile_picture)
+				new_user.put()
+				new_user.set_user_caches()
+				self.login(new_user)
+				self.redirect('/')
+
+
 
 class SignoutHandler(ParentHandler):
 
