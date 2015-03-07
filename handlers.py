@@ -105,18 +105,38 @@ class MainPage(ParentHandler):
 							 fullname = fullname,
 							 all_errors = all_errors)
 
+	def write_dashboard(self, error = ""):
+		group_users = User.get_group_users()
+		done_list = DoneList.todays_done_list(self.logged_in_user)
+		self.render_template('dashboard.html',
+							 now = date_string(timezone_now()),
+							 user = self.logged_in_user,
+							 group_users = group_users,
+							 done_list = done_list,
+							 error = error)
+
 	def get(self):
 		if not self.logged_in_user:
 			self.write_login_form()
 		else:
-			group_users = User.get_group_users()
-			self.render_template('dashboard.html',
-								 now = date_string(timezone_now()),
-								 user = self.logged_in_user,
-								 group_users = group_users)
+			self.write_dashboard()
 
 	def post(self):
-		pass
+		task = self.request.get('done_task')
+		if task:
+			done_list = DoneList.todays_done_list(self.logged_in_user)
+			if done_list:
+				done_list = done_list.update(task)
+				done_list.put()
+			else:
+				done_list = DoneList.construct(self.logged_in_user, task)
+				done_list.put()
+			done_list.set_done_list_cache()
+			self.redirect('/')
+		else:
+			error = "Task Required!"
+			self.write_dashboard(error = error)
+
 
 
 

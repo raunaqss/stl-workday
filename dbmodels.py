@@ -153,6 +153,11 @@ class DoneList(db.Model):
 	company = db.StringProperty(default = DEFAULT_COMPANY)
 
 	@classmethod
+	def todays_done_list(cls, user):
+		done_list = cls.get_done_list(user, timezone_now().date())
+		return done_list
+
+	@classmethod
 	def get_done_list(cls, user, tz_date):
 		"""
 		This decorator will first check the cache.
@@ -172,7 +177,7 @@ class DoneList(db.Model):
 		return done_task.get()
 
 	@classmethod
-	def construct(cls, task, user):
+	def construct(cls, user, task):
 		"""Constructs the DoneList and returns it without putting it."""
 		tz_date = timezone_now().date()
 		return cls(parent = user,

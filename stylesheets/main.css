@@ -2,6 +2,14 @@
 	border: 1px solid red !important;
 }
 */
+.grey-link {
+	color: #777;
+}
+
+.grey-link:hover {
+	color: #777;
+}
+
 .vertical-middle {
 	position: absolute;
 	margin-top: 20px;
@@ -39,6 +47,24 @@
 .align-btn {
 	position: absolute;
 	top: 15px;
+}
+
+.bottom-margin {
+	margin-bottom: 15px;
+}
+
+.top-zero {
+	margin-top: 0;
+}
+
+.nav-pills>li.active>a,
+.nav-pills>li.active>a:focus,
+.nav-pills>li.active>a:hover {
+	background-color: #5cb85c;
+}
+
+.green-nav-pill {
+	color: #5cb85c;
 }
 
 

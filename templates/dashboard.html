@@ -14,7 +14,8 @@
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <p class="navbar-text">{{ now }}</p>
+      <!-- Trying date label instead. -->
+      <!-- <p class="navbar-text">{{ now }}</p> -->
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/{{ user.username }}">{{ user.username }}</a></li>
 		    <li><a href="/signout">Sign Out</a></li>
@@ -26,30 +27,70 @@
 <div class="container">
 
 <!-- Code for the design dad prefers -->
-<div class="row">
-  <div class="col-md-8">
-  <ul class="nav nav-pills">
-      <li role="InputDoneList" class="active"><a href="/">Done List</a></li>
-      <li role="presentation"><a href="/todo">To Do List</a></li>
-  </ul>
-		<form method="post" class="alert-margin-top">
-      <div class="form-group">
-        <textarea class="form-control" rows="4" id="InputDoneList" name="done_task"></textarea>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-6">
+        <!-- Using active colored buttons instead. -->
+        <ul class="nav nav-pills warning">
+            <li role="InputDoneList" class="active"><a href="/">Done List</a></li>
+            <li role="presentation"><a class="green-nav-pill" href="/todo">To Do List</a></li>
+        </ul>
+        <!-- <a href="/" class="btn btn-success active" role="button"><b>Done List</b></a>
+        <a href="/todo" class="btn btn-warning" role="button">To Do List</a> -->
+      	</div>
+        <div class="col-md-6">
+          <h4 class="no-margin pull-right"><span class="label label-default">{{ now }}</span></h4>
+        </div>
       </div>
-      <input type="submit" name="onedone" value="Add" class="btn btn-success right-zero" />
-    </form>
-	</div>
-	<div class="col-md-4">
-   <div class="panel panel-default">
-      <div class="panel-heading">Team @ Spacecom</div>
-      <div class="panel-body">
-        {% for user in group_users %}
-          <li><a href="/{{ user.username }}">{{ user.username }}</a></li>
-        {% endfor %}
+      <div class="row">
+        <div class="col-md-12">
+          <form method="post" class="alert-margin-top">
+            <div class="form-group">
+              <textarea class="form-control" rows="4" id="InputDoneList" name="done_task"></textarea>
+            </div>
+            {% if error %}
+              <div class="alert alert-danger alert-padding" role="alert">
+                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                  <span class="sr-only">Error:</span>
+                  {{ error }}
+              </div>
+            {% endif %}
+            <input type="submit" name="task" value="Add" class="btn btn-success pull-right" />
+          </form>
+        </div>
       </div>
-    </div> 
+      {% if done_list %}
+      <div class="row">
+        <div class="col-md-12">
+        <!-- Panel was default, trying something new. -->
+          <!-- <div class="panel panel-success">
+            <div class="panel-heading">{{ user.username }}'s work today</div>
+            <div class="panel-body"></div>
+          </div> --> 
+          <h2 class="h3 text-muted top-zero">{{ user.username }}'s work today</h2>
+          {% for task in done_list.tasks %}
+            <ul class="bg-success">
+              <li>
+                <p class="h4">{{ task }}</p>
+              </li>
+            </ul>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  	<div class="col-md-4">
+     <div class="panel panel-default">
+        <div class="panel-heading">Team @ Spacecom</div>
+        <div class="panel-body">
+          {% for user in group_users %}
+            <li><a class="grey-link" href="/{{ user.username }}">{{ user.username }}</a></li>
+          {% endfor %}
+        </div>
+      </div> 
+    </div>
   </div>
-</div>
 
 <!-- Code for Textarea fixed to the bottom -->
 <!-- <nav class="navbar navbar-default navbar-fixed-bottom">
@@ -92,16 +133,5 @@
       </div>
     </div>
   </div>
-</div> -->
-
-<!-- <div class="row">
-  <div class="col-md-8">
-    <div class="panel panel-success">
-      <div class="panel-heading">{{ user.username }}'s work today</div>
-      <div class="panel-body">
-      </div>
-    </div> 
-  </div>
-  <div class="col-md-4"></div>
 </div> -->
 {% endblock %}
