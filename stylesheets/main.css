@@ -31,3 +31,15 @@
    margin-right: 2px;
 }
 
+.fixed-bottom {
+	position: absolute;
+	bottom: 0;
+}
+
+.align-btn {
+	position: absolute;
+	top: 15px;
+}
+
+
+

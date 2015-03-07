@@ -25,22 +25,60 @@
 </nav>
 
 <div class="container">
-<!-- <div class="row">
+<div class="row">
   <div class="col-md-8">
-    <ul class="nav nav-pills nav-stacked">
+  <ul class="nav nav-pills">
       <li role="InputDoneList" class="active"><a href="/">Done List</a></li>
       <li role="presentation"><a href="/todo">To Do List</a></li>
-    </ul>
-		<form>
-		<div class="form-group">
-			<label for="InputDoneList"><h2 class="h3">Done List <span class="label label-primary">{{ now }}</span></h2></label>
-		</div>
-		</form>
+  </ul>
+		<form method="post" class="alert-margin-top">
+      <div class="form-group">
+        <textarea class="form-control" rows="4" id="InputDoneList" name="done_task"></textarea>
+      </div>
+      <input type="submit" name="onedone" value="Add" class="btn btn-success right-zero" />
+    </form>
 	</div>
-	<div class="col-md-4"></div>
+	<div class="col-md-4">
+   <div class="panel panel-default">
+      <div class="panel-heading">Team @ Spacecom</div>
+      <div class="panel-body">
+        {% for user in group_users %}
+          <li><a href="/{{ user.username }}">{{ user.username }}</a></li>
+        {% endfor %}
+      </div>
+    </div> 
+  </div>
+</div>
+
+<!-- <nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container">
+  <div class="row">
+  <div class="col-md-8">
+    <form method="post" class="alert-margin-top" id="DoneList">
+      <div class="form-group">
+        <textarea class="form-control" rows="3" id="InputDoneList" name="done_task"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-1">
+    <input type="submit" name="onedone" value="Add" class="btn btn-lg btn-success align-btn" form="DoneList" />
+  </div>
+  </div>
+  </div>
+</nav> -->
+
+<!-- <div class="row">
+  <div class="col-md-8">
+    <form method="post">
+      <div class="form-group">
+        <textarea class="form-control" rows="6" id="InputDoneList" name="done_task"></textarea>
+      </div>
+      <input type="submit" name="onedone" value="Add" class="btn btn-success right-zero" />
+    </form>
+  </div>
 </div> -->
 
-<div class="row">
+<!-- <div class="row">
   <div class="col-md-2">
     <ul class="nav nav-pills nav-stacked">
       <li role="InputDoneList" class="active"><a href="/">Done List</a></li>
@@ -60,7 +98,7 @@
       <div class="panel-heading">Team @ Spacecom</div>
       <div class="panel-body">
       </div>
-</div>
+    </div>
   </div>
-</div>
+</div> -->
 {% endblock %}
