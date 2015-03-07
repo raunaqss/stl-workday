@@ -169,16 +169,17 @@ class DoneList(db.Model):
 		done_task = cls.all().ancestor(user)
 		done_task.filter("user_id = ", user.key().id())
 		done_task.filter("tz_date = ", tz_date)
-
 		return done_task.get()
 
 	@classmethod
 	def construct(cls, task, user):
 		"""Constructs the DoneList and returns it without putting it."""
+		tz_date = timezone_now().date()
 		return cls(parent = user,
+				   key_name = donelist_permalink(user.username, tz_date),
 				   tasks = [db.Text(task)],
 				   user_id = user.key().id(),
-				   tz_date = timezone_now().date())
+				   tz_date = tz_date)
 
 	def update(self, task):
 		"""Updates itself with the given task without putting it to the db."""

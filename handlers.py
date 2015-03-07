@@ -202,7 +202,6 @@ class SignupHandler(ParentHandler):
 				self.redirect('/')
 
 
-
 class SignoutHandler(ParentHandler):
 
 	def get(self):
