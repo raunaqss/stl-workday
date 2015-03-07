@@ -13,7 +13,7 @@ DEFAULT_COMPANY = 'Spacecom Software LLP'
 DEFAULT_TIMEZONE = 'Asia/Kolkata'
 
 
-def users_key(group = 'default'):
+def users_key(group = 'Spacecom'): # makes further grouping possible
 	return db.Key.from_path('users', group)
 
 
@@ -28,6 +28,19 @@ class User(db.Model):
 	company = db.StringProperty(default = DEFAULT_COMPANY)
 	timezone = db.StringProperty(default = DEFAULT_TIMEZONE)
 	date_created = db.DateTimeProperty()
+
+	@classmethod
+	def get_group_users(cls, group = 'Spacecom'):
+		group_users = memcache.get(group)
+		if not group_users:
+			group_users = cls.db_group_users(group)
+		if group_users:
+			set_cache(group, group_users)
+		return group_users
+
+	@classmethod
+	def db_group_users(cls, group = 'Spacecom'):
+		return cls.all().ancestor(users_key(group))
 
 	@classmethod
 	def get_user(cls, uid_or_username_or_email):

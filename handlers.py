@@ -109,9 +109,11 @@ class MainPage(ParentHandler):
 		if not self.logged_in_user:
 			self.write_login_form()
 		else:
+			group_users = User.get_group_users()
 			self.render_template('dashboard.html',
 								 now = date_string(timezone_now()),
-								 user = self.logged_in_user)
+								 user = self.logged_in_user,
+								 group_users = group_users)
 
 	def post(self):
 		pass
@@ -195,6 +197,7 @@ class SignupHandler(ParentHandler):
 										 profile_picture)
 				new_user.put()
 				new_user.set_user_caches()
+				memcache.delete('Spacecom') # del obsolete cache
 				self.login(new_user)
 				self.redirect('/')
 
