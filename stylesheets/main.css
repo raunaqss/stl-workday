@@ -67,5 +67,19 @@
 	color: #5cb85c;
 }
 
+.link-align {
+	padding: 14px 12px;
+}
+
+.link-align:hover {
+	text-decoration: none;
+}
+
+.like-link {
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+}
 
 

@@ -194,3 +194,7 @@ class DoneList(db.Model):
 	def set_done_list_cache(self):
 		set_cache(make_cache_key(self.user_id, self.tz_date), self)
 
+	def del_task(self, task_index):
+		self.tasks.pop(task_index)
+		self.put()
+

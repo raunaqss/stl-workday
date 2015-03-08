@@ -122,20 +122,32 @@ class MainPage(ParentHandler):
 			self.write_dashboard()
 
 	def post(self):
-		task = self.request.get('done_task')
-		if task:
-			done_list = DoneList.todays_done_list(self.logged_in_user)
-			if done_list:
-				done_list = done_list.update(task)
-				done_list.put()
+		add_task = self.request.get('add_task')
+		edit_task = self.request.get('edit_task')
+		delete_task = self.request.get('delete_task')
+		done_list = DoneList.todays_done_list(self.logged_in_user)
+		if add_task == "Add":
+			done_task = self.request.get('done_task')
+			if done_task:
+				if done_list:
+					done_list = done_list.update(done_task)
+					done_list.put()
+				else:
+					done_list = DoneList.construct(self.logged_in_user,
+												   done_task)
+					done_list.put()
+				done_list.set_done_list_cache()
+				self.redirect('/')
 			else:
-				done_list = DoneList.construct(self.logged_in_user, task)
-				done_list.put()
+				error = "Task Required!"
+				self.write_dashboard(error = error)
+		elif edit_task:
+			pass
+		elif delete_task:
+			done_list.del_task(int(delete_task))
 			done_list.set_done_list_cache()
 			self.redirect('/')
-		else:
-			error = "Task Required!"
-			self.write_dashboard(error = error)
+
 
 
 
@@ -146,14 +158,16 @@ class LoginHandler(ParentHandler):
 		self.redirect('/')
 
 	def post(self):
-		username_or_email = self.request.get('username_or_email')
-		password = self.request.get('password')
-		user = User.valid_login(username_or_email, password)
-		if user:
-			self.login(user)
-			self.redirect('/')
-		else:
-			self.redirect('/') # this is temporary
+		signin = self.request.get('signin')
+		if signin == "Sign In":
+			username_or_email = self.request.get('username_or_email')
+			password = self.request.get('password')
+			user = User.valid_login(username_or_email, password)
+			if user:
+				self.login(user)
+				self.redirect('/')
+			else:
+				self.redirect('/') # this is temporary
 
 
 class SignupHandler(ParentHandler):
@@ -178,52 +192,56 @@ class SignupHandler(ParentHandler):
 		self.redirect('/')
 
 	def post(self):
-		username = self.request.get('username')
-		email = self.request.get('email')
-		fullname = self.request.get('fullname')
-		password = self.request.get('password')
-		profile_picture = self.request.get('profile_picture')
-		valid_entries, all_errors = validate_signup(username,
-													email,
-													fullname,
-													password,
-													profile_picture)
-		if not valid_entries:
-			self.write_login_form(email = email,
-								  username = username,
-								  fullname = fullname,
-								  all_errors = all_errors)
-		else:
-			existing_user = User.get_user(email)
-			taken_username = User.get_user(username)
-			if existing_user or taken_username:
-				if existing_user:
-					all_errors[
-					'email_error'
-					] = "This email has already been registered."
-				if taken_username:
-					all_errors[
-					'username_error'
-					] = "This username is already taken."
+		signup = self.request.get('signup')
+		if signup == "Sign Up":
+			username = self.request.get('username')
+			email = self.request.get('email')
+			fullname = self.request.get('fullname')
+			password = self.request.get('password')
+			profile_picture = self.request.get('profile_picture')
+			valid_entries, all_errors = validate_signup(username,
+														email,
+														fullname,
+														password,
+														profile_picture)
+			if not valid_entries:
 				self.write_login_form(email = email,
 									  username = username,
 									  fullname = fullname,
 									  all_errors = all_errors)
 			else:
-				new_user = User.register(username,
-										 email,
-										 fullname,
-										 password,
-										 profile_picture)
-				new_user.put()
-				new_user.set_user_caches()
-				memcache.delete('Spacecom') # del obsolete cache
-				self.login(new_user)
-				self.redirect('/')
+				existing_user = User.get_user(email)
+				taken_username = User.get_user(username)
+				if existing_user or taken_username:
+					if existing_user:
+						all_errors[
+						'email_error'
+						] = "This email has already been registered."
+					if taken_username:
+						all_errors[
+						'username_error'
+						] = "This username is already taken."
+					self.write_login_form(email = email,
+										  username = username,
+										  fullname = fullname,
+										  all_errors = all_errors)
+				else:
+					new_user = User.register(username,
+											 email,
+											 fullname,
+											 password,
+											 profile_picture)
+					new_user.put()
+					new_user.set_user_caches()
+					memcache.delete('Spacecom') # del obsolete cache
+					self.login(new_user)
+					self.redirect('/')
 
 
 class SignoutHandler(ParentHandler):
 
-	def get(self):
-		self.logout()
-		self.redirect('/')
+	def post(self):
+		signout = self.request.get('signout')
+		if signout == 'Sign Out':
+			self.logout()
+			self.redirect('/')

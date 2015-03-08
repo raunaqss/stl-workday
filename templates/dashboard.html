@@ -18,7 +18,11 @@
       <!-- <p class="navbar-text">{{ now }}</p> -->
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/{{ user.username }}">{{ user.username }}</a></li>
-		    <li><a href="/signout">Sign Out</a></li>
+		    <li><!-- <a href="/signout">Sign Out</a> -->
+          <form method="post" action="/signout" class="form-inline navbar-from navbar-right">
+              <input type="submit" class="btn btn-link navbar-button link-align" name = "signout" value="Sign Out" />
+          </form>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -56,7 +60,7 @@
                   {{ error }}
               </div>
             {% endif %}
-            <input type="submit" name="task" value="Add" class="btn btn-success pull-right" />
+            <input type="submit" name="add_task" value="Add" class="btn btn-success pull-right" />
           </form>
         </div>
       </div>
@@ -69,10 +73,14 @@
             <div class="panel-body"></div>
           </div> --> 
           <h2 class="h3 text-muted top-zero">{{ user.username }}'s work today</h2>
-          {% for task in done_list.tasks %}
+          {% for i in range(done_list.tasks|length) %}
             <ul class="bg-success">
               <li>
-                <p class="h4">{{ task }}</p>
+                <form method="post" class="pull-right">
+                  <button type="submit" class="btn btn-link like-link grey-link" name = "edit_task" value="{{ i }}">edit</button>
+                  <button type="submit" class="btn btn-link like-link grey-link" name = "delete_task" value="{{ i }}">del</button>
+                </form>
+                <p class="h4">{{ done_list.tasks[i] }}</p>
               </li>
             </ul>
           {% endfor %}
@@ -84,8 +92,10 @@
      <div class="panel panel-default">
         <div class="panel-heading">Team @ Spacecom</div>
         <div class="panel-body">
-          {% for user in group_users %}
-            <li><a class="grey-link" href="/{{ user.username }}">{{ user.username }}</a></li>
+          {% for this_user in group_users %}
+            {% if this_user.username != user.username %}
+              <li><a href="/{{ user.username }}">{{ this_user.username }}</a></li>
+            {% endif %}
           {% endfor %}
         </div>
       </div> 
