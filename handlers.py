@@ -85,6 +85,26 @@ class ParentHandler(Handler):
 		uid = self.read_secure_cookie('user_id')
 		#logging.info('uid is %s' % uid)
 		self.logged_in_user = uid and User.get_user(uid)
+		self.todays_done_list = uid and DoneList.todays_done_list(
+			self.logged_in_user)
+
+	def write_dashboard(self,
+						function = "main",
+						error = "",
+						edit_no = None):
+		group_users = User.get_group_users()
+		edit_task_content = ""
+		if type(edit_no) is int: # since 0 is equivalent to None
+			edit_task_content = self.todays_done_list.tasks[edit_no]
+			logging.error('edit_task_content = ' + edit_task_content)
+		self.render_template("dashboard-" + function + ".html",
+							 now = date_string(timezone_now()),
+							 user = self.logged_in_user,
+							 group_users = group_users,
+							 done_list = self.todays_done_list,
+							 edit_no = edit_no,
+							 edit_task_content = edit_task_content,
+							 error = error)
 
 
 class MainPage(ParentHandler):
@@ -105,16 +125,6 @@ class MainPage(ParentHandler):
 							 fullname = fullname,
 							 all_errors = all_errors)
 
-	def write_dashboard(self, error = ""):
-		group_users = User.get_group_users()
-		done_list = DoneList.todays_done_list(self.logged_in_user)
-		self.render_template('dashboard.html',
-							 now = date_string(timezone_now()),
-							 user = self.logged_in_user,
-							 group_users = group_users,
-							 done_list = done_list,
-							 error = error)
-
 	def get(self):
 		if not self.logged_in_user:
 			self.write_login_form()
@@ -122,34 +132,25 @@ class MainPage(ParentHandler):
 			self.write_dashboard()
 
 	def post(self):
-		add_task = self.request.get('add_task')
-		edit_task = self.request.get('edit_task')
-		delete_task = self.request.get('delete_task')
-		done_list = DoneList.todays_done_list(self.logged_in_user)
-		if add_task == "Add":
-			done_task = self.request.get('done_task')
-			if done_task:
-				if done_list:
-					done_list = done_list.update(done_task)
-					done_list.put()
+		if self.logged_in_user:
+			add_task = self.request.get('add_task')
+			if add_task == "Add":
+				done_task = self.request.get('done_task')
+				if done_task:
+					if self.todays_done_list:
+						done_list = self.todays_done_list.update(done_task)
+						done_list.put()
+					else:
+						done_list = DoneList.construct(self.logged_in_user,
+													   done_task)
+						done_list.put()
+					done_list.set_done_list_cache()
+					self.redirect('/')
 				else:
-					done_list = DoneList.construct(self.logged_in_user,
-												   done_task)
-					done_list.put()
-				done_list.set_done_list_cache()
-				self.redirect('/')
-			else:
-				error = "Task Required!"
-				self.write_dashboard(error = error)
-		elif edit_task:
-			pass
-		elif delete_task:
-			done_list.del_task(int(delete_task))
-			done_list.set_done_list_cache()
-			self.redirect('/')
-
-
-
+					error = "Task Required!"
+					self.write_dashboard(error = error)
+		else:
+			sel.redirect('/') # to handle case of cookie deletion
 
 
 class LoginHandler(ParentHandler):
@@ -245,3 +246,40 @@ class SignoutHandler(ParentHandler):
 		if signout == 'Sign Out':
 			self.logout()
 			self.redirect('/')
+
+
+class EditHandler(ParentHandler):
+
+	def get(self):
+		task_index = self.request.get('task')
+		self.write_dashboard("edit",
+							 "",
+							 int(task_index))
+
+	def post(self):
+		if self.logged_in_user:
+			edit_task = self.request.get('edit_task')
+			delete_task = self.request.get('delete_task')
+			logging.error('edit_task = ' + edit_task)
+			logging.error('delete_task = ' + delete_task)
+			if edit_task:
+				done_task = self.request.get('done_task')
+				if done_task:
+					done_list = self.todays_done_list.edit(int(edit_task),
+														   done_task)
+					done_list.put()
+					done_list.set_done_list_cache()
+					self.redirect('/')
+				else:
+					error = "Task Required!"
+					self.write_dashboard("edit",
+										 error,
+										 int(edit_task))
+			elif delete_task:
+				done_list = self.todays_done_list.del_task(int(delete_task))
+				done_list.put()
+				done_list.set_done_list_cache()
+				self.redirect('/')
+		else:
+			self.redirect('/')
+		

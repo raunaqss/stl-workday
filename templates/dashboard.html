@@ -51,7 +51,7 @@
         <div class="col-md-12">
           <form method="post" class="alert-margin-top">
             <div class="form-group">
-              <textarea class="form-control" rows="4" id="InputDoneList" name="done_task"></textarea>
+              <textarea class="form-control" rows="3" id="InputDoneList" name="done_task">{{ edit_task_content }}</textarea>
             </div>
             {% if error %}
               <div class="alert alert-danger alert-padding" role="alert">
@@ -60,7 +60,8 @@
                   {{ error }}
               </div>
             {% endif %}
-            <input type="submit" name="add_task" value="Add" class="btn btn-success pull-right" />
+            {% block function %}
+            {% endblock %}
           </form>
         </div>
       </div>
@@ -74,15 +75,14 @@
           </div> --> 
           <h2 class="h3 text-muted top-zero">{{ user.username }}'s work today</h2>
           {% for i in range(done_list.tasks|length) %}
+          {% if i != edit_no %}
             <ul class="bg-success">
               <li>
-                <form method="post" class="pull-right">
-                  <button type="submit" class="btn btn-link like-link grey-link" name = "edit_task" value="{{ i }}">edit</button>
-                  <button type="submit" class="btn btn-link like-link grey-link" name = "delete_task" value="{{ i }}">del</button>
-                </form>
+                <a href="/_edit?task={{ i }}" class="pull-right grey-link right-space">edit</a>
                 <p class="h4">{{ done_list.tasks[i] }}</p>
               </li>
             </ul>
+            {% endif %}
           {% endfor %}
         </div>
       </div>

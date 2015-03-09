@@ -196,5 +196,9 @@ class DoneList(db.Model):
 
 	def del_task(self, task_index):
 		self.tasks.pop(task_index)
-		self.put()
+		return self
+
+	def edit(self, task_index, task):
+		self.tasks[task_index] = db.Text(task)
+		return self
 
