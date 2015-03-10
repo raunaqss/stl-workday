@@ -17,6 +17,7 @@
       <!-- Trying date label instead. -->
       <!-- <p class="navbar-text">{{ now }}</p> -->
       <ul class="nav navbar-nav navbar-right">
+        <li><img src="/img?img_id={{ user.key() }}&dimensions=32x32" class="navbar-img"></li>
         <li><a href="/{{ user.username }}">{{ user.username }}</a></li>
 		    <li><!-- <a href="/signout">Sign Out</a> -->
           <form method="post" action="/signout" class="form-inline navbar-from navbar-right">
@@ -29,7 +30,6 @@
 </nav>
 
 <div class="container">
-
 <!-- Code for the design dad prefers -->
   <div class="row">
     <div class="col-md-8">
@@ -46,7 +46,7 @@
         <div class="col-md-6">
           <h4 class="no-margin pull-right"><span class="label label-default">{{ now }}</span></h4>
         </div>
-      </div>
+      </div><!-- /.row -->
       <div class="row">
         <div class="col-md-12">
           <form method="post" class="alert-margin-top">
@@ -63,8 +63,8 @@
             {% block function %}
             {% endblock %}
           </form>
-        </div>
-      </div>
+        </div><!-- /.col-md-12 -->
+      </div><!-- /.row -->
       {% if done_list %}
       <div class="row">
         <div class="col-md-12">
@@ -84,10 +84,10 @@
             </ul>
             {% endif %}
           {% endfor %}
-        </div>
-      </div>
+        </div><!-- /.col-md-12 -->
+      </div><!-- /.row -->
       {% endif %}
-    </div>
+    </div><!-- /.col-md-8 -->
   	<div class="col-md-4">
      <div class="panel panel-default">
         <div class="panel-heading">Team @ Spacecom</div>
@@ -99,8 +99,9 @@
           {% endfor %}
         </div>
       </div> 
-    </div>
-  </div>
+    </div><!-- /.col-md-4 -->
+  </div><!-- /.row -->
+</div><!-- /.container -->
 
 <!-- Code for Textarea fixed to the bottom -->
 <!-- <nav class="navbar navbar-default navbar-fixed-bottom">

@@ -9,6 +9,7 @@ from utils import *
 from dbmodels import *
 
 from google.appengine.ext import db
+from google.appengine.api import images
 from google.appengine.api import memcache
 
 
@@ -283,3 +284,16 @@ class EditHandler(ParentHandler):
 		else:
 			self.redirect('/')
 		
+
+class ImageHandler(ParentHandler):
+
+	def get(self):
+		user = db.get(self.request.get('img_id'))
+		dimensions = self.request.get('dimensions')
+		width, height = dimensions and [int(x) for x in dimensions.split('x')]
+		if user:
+			avatar = images.resize(user.profile_picture, width, height)
+			self.response.headers['Content-Type'] = 'image/png'
+			self.write(avatar)
+		else:
+			self.write('No image')
