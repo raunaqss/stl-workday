@@ -94,7 +94,7 @@
         <div class="panel-body">
           {% for this_user in group_users %}
             {% if this_user.username != user.username %}
-              <li><a href="/{{ user.username }}">{{ this_user.username }}</a></li>
+              <li><a href="/{{ this_user.username }}">{{ this_user.username }}</a></li>
             {% endif %}
           {% endfor %}
         </div>
