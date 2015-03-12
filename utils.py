@@ -12,11 +12,11 @@ from pytz.gae import pytz
 from secret import *
 
 
-def donelist_permalink(username, date_object):
-	return username + '/' + date_object.strftime('%a-%d-%b-%Y')
+def done_list_key(username, date_object):
+	return '/' + username + '/' + date_object.strftime('%d-%m-%Y')
 
 
-def make_cache_key(user_id, date_object):
+def done_list_cache_key(user_id, date_object):
 	return str(user_id) + '_' + date_string(date_object)
 
 

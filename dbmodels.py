@@ -40,6 +40,7 @@ class User(db.Model):
 
 	@classmethod
 	def db_group_users(cls, group = 'Spacecom'):
+		logging.error('DB Query Group')
 		return cls.all().ancestor(users_key(group))
 
 	@classmethod
@@ -74,7 +75,7 @@ class User(db.Model):
 		uid: String
 		Returns: User entity
 		'''
-		logging.error('DB QUERY')
+		logging.error('DB QUERY User')
 		return cls.get_by_id(long(uid), parent = users_key())
 
 	@classmethod
@@ -85,7 +86,7 @@ class User(db.Model):
 		username: String
 		Returns: User entity
 		'''
-		logging.error('DB QUERY')
+		logging.error('DB QUERY User')
 		user = cls.all().ancestor(users_key()).filter("username = ",
 													  username).get()
 		return user
@@ -96,7 +97,7 @@ class User(db.Model):
 		Returns the user with the given email.
 		email: String (from EmailProperty)
 		"""
-		logging.error('DB QUERY')
+		logging.error('DB QUERY User')
 		user = cls.all().ancestor(users_key()).filter("email = ",
 													 email).get()
 		return user
@@ -153,24 +154,37 @@ class DoneList(db.Model):
 	company = db.StringProperty(default = DEFAULT_COMPANY)
 
 	@classmethod
-	def todays_done_list(cls, user):
-		done_list = cls.get_done_list(user, timezone_now().date())
+	def todays_done_list(cls, username):
+		done_list = cls.get_done_list(username, timezone_now().date())
 		return done_list
 
 	@classmethod
-	def get_done_list(cls, user, tz_date):
+	def get_done_list(cls, username, tz_date):
 		"""
 		This decorator will first check the cache.
 		If not found in cache, call DB query and set the cache.
 		"""
-		done_list = memcache.get(make_cache_key(user.key().id(), tz_date))
+		done_list = memcache.get(done_list_key(username, tz_date))
 		if not done_list:
-			done_list = cls.by_user_n_date(user, tz_date)
+			done_list = cls.by_key(done_list_key(username, tz_date))
+			if done_list:
+				done_list.set_done_list_cache()
+		return done_list
+
+	@classmethod
+	def by_key(cls, done_list_key):
+		logging.error('DB QUERY DoneList')
+		done_list = cls.get_by_key_name(done_list_key, 
+			parent = User.get_user(done_list_key.split('/')[1]))
 		return done_list
 
 	@classmethod
 	def by_user_n_date(cls, user, tz_date):
-		"""This decorator is a DB Query."""
+		"""
+		This decorator is a DB Query.
+		I wrote this decorator earlier and I'll probably never use it.
+		"""
+		logging.error('DB QUERY DoneList')
 		done_task = cls.all().ancestor(user)
 		done_task.filter("user_id = ", user.key().id())
 		done_task.filter("tz_date = ", tz_date)
@@ -181,7 +195,7 @@ class DoneList(db.Model):
 		"""Constructs the DoneList and returns it without putting it."""
 		tz_date = timezone_now().date()
 		return cls(parent = user,
-				   key_name = donelist_permalink(user.username, tz_date),
+				   key_name = done_list_key(user.username, tz_date),
 				   tasks = [db.Text(task)],
 				   user_id = user.key().id(),
 				   tz_date = tz_date)
@@ -192,7 +206,7 @@ class DoneList(db.Model):
 		return self
 
 	def set_done_list_cache(self):
-		set_cache(make_cache_key(self.user_id, self.tz_date), self)
+		set_cache(self.key().name(), self)
 
 	def del_task(self, task_index):
 		self.tasks.pop(task_index)

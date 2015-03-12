@@ -86,23 +86,26 @@ class ParentHandler(Handler):
 		uid = self.read_secure_cookie('user_id')
 		#logging.info('uid is %s' % uid)
 		self.logged_in_user = uid and User.get_user(uid)
-		self.todays_done_list = uid and DoneList.todays_done_list(
-			self.logged_in_user)
 
 	def write_dashboard(self,
 						function = "main",
 						error = "",
 						edit_no = None):
+		"""
+		Writes the dashboard page. Either for editing or adding.
+		edit_no: Int or None
+		"""
 		group_users = User.get_group_users()
 		edit_task_content = ""
+		done_list = DoneList.todays_done_list(self.logged_in_user.username)
 		if type(edit_no) is int: # since 0 is equivalent to None
-			edit_task_content = self.todays_done_list.tasks[edit_no]
-			logging.error('edit_task_content = ' + edit_task_content)
+			edit_task_content = done_list.tasks[edit_no]
+			# logging.error('edit_task_content = ' + edit_task_content)
 		self.render_template("dashboard-" + function + ".html",
 							 now = date_string(timezone_now()),
 							 user = self.logged_in_user,
 							 group_users = group_users,
-							 done_list = self.todays_done_list,
+							 done_list = done_list,
 							 edit_no = edit_no,
 							 edit_task_content = edit_task_content,
 							 error = error)
@@ -138,8 +141,10 @@ class MainPage(ParentHandler):
 			if add_task == "Add":
 				done_task = self.request.get('done_task')
 				if done_task:
-					if self.todays_done_list:
-						done_list = self.todays_done_list.update(done_task)
+					done_list = DoneList.todays_done_list(
+						self.logged_in_user.username)
+					if done_list:
+						done_list = done_list.update(done_task)
 						done_list.put()
 					else:
 						done_list = DoneList.construct(self.logged_in_user,
@@ -235,7 +240,7 @@ class SignupHandler(ParentHandler):
 											 profile_picture)
 					new_user.put()
 					new_user.set_user_caches()
-					memcache.delete('Spacecom') # del obsolete cache
+					memcache.delete('Spacecom') # del obsolete group cache
 					self.login(new_user)
 					self.redirect('/')
 
@@ -261,13 +266,13 @@ class EditHandler(ParentHandler):
 		if self.logged_in_user:
 			edit_task = self.request.get('edit_task')
 			delete_task = self.request.get('delete_task')
-			logging.error('edit_task = ' + edit_task)
-			logging.error('delete_task = ' + delete_task)
+			# logging.error('edit_task = ' + edit_task)
+			# logging.error('delete_task = ' + delete_task)
+			done_list = DoneList.todays_done_list(self.logged_in_user.username)
 			if edit_task:
 				done_task = self.request.get('done_task')
 				if done_task:
-					done_list = self.todays_done_list.edit(int(edit_task),
-														   done_task)
+					done_list = done_list.edit(int(edit_task), done_task)
 					done_list.put()
 					done_list.set_done_list_cache()
 					self.redirect('/')
@@ -277,7 +282,7 @@ class EditHandler(ParentHandler):
 										 error,
 										 int(edit_task))
 			elif delete_task:
-				done_list = self.todays_done_list.del_task(int(delete_task))
+				done_list = done_list.del_task(int(delete_task))
 				done_list.put()
 				done_list.set_done_list_cache()
 				self.redirect('/')
