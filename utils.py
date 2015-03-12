@@ -13,7 +13,9 @@ from secret import *
 
 
 def done_list_key(username, date_object):
-	return '/' + username + '/' + date_object.strftime('%d-%m-%Y')
+	if not date_object:
+		date_object = timezone_now().date()
+	return username + '/' + date_object.strftime('%d-%m-%Y')
 
 
 def done_list_cache_key(user_id, date_object):

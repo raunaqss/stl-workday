@@ -94,4 +94,13 @@
 	margin-top: 8px;
 }
 
+.username:hover {
+	color: black;
+	text-decoration: inherit;
+}
+
+/*.input-group.date {
+	margin-left: 50px;
+}*/
+
 

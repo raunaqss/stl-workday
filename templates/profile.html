@@ -1,0 +1,33 @@
+{% extends "header.html" %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+			<form>
+				<div class="span5 col-md-5" id="sandbox-container">
+				<div class="input-group date">
+					<input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+				</div>
+				</div>
+			</form>
+<script type="text/javascript">
+$(document).ready(function($) {
+$('#sandbox-container .input-group.date').datepicker({
+format: "dd-mm-yyyy",
+startDate: "01-03-2015",
+endDate: "13-03-2015",
+todayHighlight: true});
+});
+</script>
+		</div>
+		<div class="col-md-4">
+			<div class="thumbnail">
+				<img src="/img?img_id={{ this_user.key() }}&dimensions=500x350" alt="{{ this_user.username }}'s profile picture">
+					<div class="caption">
+						<a class="h3 no-margin username" href="/{{ this_user.username }}">@{{ this_user.username }}</a>
+					</div>
+			</div>
+		</div><!-- /.col-md-4 -->
+	</div><!-- /.row -->
+</div>
+{% endblock %}
