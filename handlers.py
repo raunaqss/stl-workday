@@ -247,6 +247,9 @@ class SignupHandler(ParentHandler):
 
 class SignoutHandler(ParentHandler):
 
+	def get(self):
+		self.redirect('/')
+
 	def post(self):
 		signout = self.request.get('signout')
 		if signout == 'Sign Out':
