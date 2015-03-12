@@ -155,18 +155,19 @@ class DoneList(db.Model):
 
 	@classmethod
 	def todays_done_list(cls, username):
-		done_list = cls.get_done_list(username, timezone_now().date())
+		done_list = cls.get_done_list(done_list_key(username,
+													timezone_now().date()))
 		return done_list
 
 	@classmethod
-	def get_done_list(cls, username, tz_date):
+	def get_done_list(cls, done_list_key):
 		"""
 		This decorator will first check the cache.
 		If not found in cache, call DB query and set the cache.
 		"""
-		done_list = memcache.get(done_list_key(username, tz_date))
+		done_list = memcache.get(done_list_key)
 		if not done_list:
-			done_list = cls.by_key(done_list_key(username, tz_date))
+			done_list = cls.by_key(done_list_key)
 			if done_list:
 				done_list.set_done_list_cache()
 		return done_list
@@ -175,7 +176,7 @@ class DoneList(db.Model):
 	def by_key(cls, done_list_key):
 		logging.error('DB QUERY DoneList')
 		done_list = cls.get_by_key_name(done_list_key, 
-			parent = User.get_user(done_list_key.split('/')[1]))
+			parent = User.get_user(done_list_key.split('/')[0]))
 		return done_list
 
 	@classmethod
