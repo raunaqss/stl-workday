@@ -300,6 +300,7 @@ class ImageHandler(ParentHandler):
 		dimensions = self.request.get('dimensions')
 		width, height = dimensions and [int(x) for x in dimensions.split('x')]
 		if user:
+			logging.error(images.Image(user.profile_picture).width)
 			avatar = images.resize(user.profile_picture, width, height)
 			self.response.headers['Content-Type'] = 'image/png'
 			self.write(avatar)

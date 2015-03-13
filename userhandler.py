@@ -31,3 +31,5 @@ class UserHandler(ParentHandler):
 				start_date = date_to_date_key(this_user.date_created),
 				end_date = date_to_date_key(timezone_now().date()),
 				user_done_list = user_done_list)
+		else:
+			self.redirect('/')

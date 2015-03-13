@@ -1,8 +1,9 @@
-{% extends "header.html" %}
+{% extends "profile-header.html" %}
 {% block body %}
-<div class="container">
-	<div class="row">
-		<div class="col-md-4">
+<div class="container-fluid">
+	<div class="row profile-header">
+		<div class="container">
+		<!-- <div class="col-md-4">
 			<div class="thumbnail">
 				<img src="/img?img_id={{ this_user.key() }}&dimensions=500x350" alt="{{ this_user.username }}'s profile picture">
 					<div class="caption">
@@ -10,36 +11,62 @@
 						<p>Spacecom Sofware</p>
 					</div>
 			</div>
-		</div><!-- /.col-md-4 -->
-		<div class="col-md-8">
+		</div> --><!-- /.col-md-4 -->
+		<div class="col-md-2">
+			<img src="/img?img_id={{ this_user.key() }}&dimensions=170x170" alt="{{ this_user.username }}'s profile picture" class="img-circle">
+		</div>
+		<div class="col-md-4 user-heading">
+			<a class="h2 username color-white" href="/{{ this_user.username }}">{{ this_user.fullname }}</a>
+			<p class="h4 light-green">@{{ this_user.username }}</p>
+			<p class="h4 light-green">Spacecom Software</p>
+		</div>
+		<div class="col-md-6">
 			<form>
-				<label class="h2 top-zero" for="datepicker">{{ this_user.username }}'s work on:</label>
 				<div id="sandbox-container">
-					<div class="input-group date">
-						<input type="text" class="form-control" id="datepicker" name="date" value="{{ date_key }}">
-						<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+					{% if this_user.username == user.username %}
+					<label class="h3 top-zero light-green" for="datepicker">your work on:</label>
+					{% else %}
+					<label class="h3 top-zero light-green" for="datepicker">his work on:</label>
+					{% endif %}
+					<div class="form-group">
+						<input type="text" type="text" class="form-control header-input" id="datepicker" name="date" value="{{ date_key }}">
 					</div>
-					<input type="submit" class="btn btn-default top-15" value="View">
 				</div>
+				<input type="submit" class="btn btn-success pull-right" value="View">
 			</form>
 			<script type="text/javascript">
 				$(document).ready(function($) {
-				$('#sandbox-container .input-group.date').datepicker({
+				$('#sandbox-container input').datepicker({
 				format: "dd-mm-yyyy",
+				orientation: "top left",
 				startDate: "{{ start_date }}",
 				endDate: "{{ end_date }}",
 				autoclose: true,
 				todayHighlight: true});
 				});
 			</script>
-			<ul class="list-group top-15">
-              {% for i in range(user_done_list.tasks|length) %}
-              <li class="list-group-item success-border">
-                <p class="lead">{{ user_done_list.tasks[i] }}</p>
-              </li>
-              {% endfor %}
-            </ul>
 		</div><!-- /.col-md-8 -->
+		</div><!-- /.container -->
+	</div><!-- /.row -->
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+		<ul class="list-group top-15">
+			{% for i in range(user_done_list.tasks|length) %}
+				<li class="list-group-item success-border">
+					{% if end_date in user_done_list.key().name() %}
+					{% if this_user.username == user.username %}
+					<a href="/_edit?task={{ i }}" class="pull-right grey-link right-space">edit</a>
+					{% endif %}
+					{% endif %}
+					<p class="lead">{{ user_done_list.tasks[i] }}</p>
+				</li>
+			{% endfor %}
+		</ul>
+		</div>
+		<div class="col-md-2"></div>
 	</div><!-- /.row -->
 </div>
 {% endblock %}

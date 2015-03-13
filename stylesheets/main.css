@@ -91,8 +91,8 @@
 }
 
 .username:hover {
-	color: black;
-	text-decoration: inherit;
+	color: white;
+	text-decoration: none;
 }
 
 .top-15 {
@@ -116,9 +116,43 @@
 	margin: 0;
 }
 
+.profile-header {
+	/*background-color: #145414;*/
+	background-color: #444C38
+;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.bottom-0 {
+	margin-bottom: 0;
+}
+
+.color-white {
+	color: white;
+}
 
 /*.input-group.date {
 	margin-left: 50px;
 }*/
+
+.light-green {
+	color: #d6e9c6;
+}
+
+.header-input {
+	background-color: inherit;
+	border-color: #d6e9c6;
+	color: #d6e9c6;
+}
+
+.header-input:focus {
+	color: #d6e9c6;
+}
+
+.user-heading {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
 
 
