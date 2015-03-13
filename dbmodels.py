@@ -27,7 +27,7 @@ class User(db.Model):
 	profile_picture = db.BlobProperty()
 	company = db.StringProperty(default = DEFAULT_COMPANY)
 	timezone = db.StringProperty(default = DEFAULT_TIMEZONE)
-	date_created = db.DateTimeProperty()
+	date_created = db.DateTimeProperty() # in user's timezone
 
 	@classmethod
 	def get_group_users(cls, group = 'Spacecom'):
@@ -123,7 +123,7 @@ class User(db.Model):
 					fullname = fullname,
 					pw_hash = pw_hash,
 					profile_picture = profile_picture,
-					date_created = aware_utcnow())
+					date_created = timezone_now())
 
 	@classmethod
 	def valid_login(cls, username_or_email, pw):
@@ -155,16 +155,17 @@ class DoneList(db.Model):
 
 	@classmethod
 	def todays_done_list(cls, username):
-		done_list = cls.get_done_list(done_list_key(username,
-													timezone_now().date()))
+		done_list = cls.get_done_list(username,
+									  date_to_date_key(timezone_now().date()))
 		return done_list
 
 	@classmethod
-	def get_done_list(cls, done_list_key):
+	def get_done_list(cls, username, date_key):
 		"""
 		This decorator will first check the cache.
 		If not found in cache, call DB query and set the cache.
 		"""
+		done_list_key = username + '/' + date_key
 		done_list = memcache.get(done_list_key)
 		if not done_list:
 			done_list = cls.by_key(done_list_key)

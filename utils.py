@@ -12,9 +12,11 @@ from pytz.gae import pytz
 from secret import *
 
 
+def date_to_date_key(date_object):
+	return date_object.strftime('%d-%m-%Y')
+
+
 def done_list_key(username, date_object):
-	if not date_object:
-		date_object = timezone_now().date()
 	return username + '/' + date_object.strftime('%d-%m-%Y')
 
 

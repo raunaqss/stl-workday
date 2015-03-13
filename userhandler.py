@@ -16,12 +16,18 @@ from google.appengine.api import memcache
 
 class UserHandler(ParentHandler):
 
-	def get(self, username, date_key):
+	def get(self, username):
 		if self.logged_in_user:
-			user_done_list = DoneList.get_done_list(done_list_key(username,
-																  date_key))
+			date_key = self.request.get('date')
+			if not date_key:
+				date_key = date_to_date_key(timezone_now().date())
+			user_done_list = DoneList.get_done_list(username, date_key)
+			this_user = User.get_user(username)
 			self.render_template('profile.html',
 				title = username,
 				user = self.logged_in_user,
-				this_user = User.get_user(username),
+				this_user = this_user,
+				date_key = date_key,
+				start_date = date_to_date_key(this_user.date_created),
+				end_date = date_to_date_key(timezone_now().date()),
 				user_done_list = user_done_list)
