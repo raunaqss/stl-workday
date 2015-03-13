@@ -44,17 +44,17 @@
             <div class="panel-heading">{{ user.username }}'s work today</div>
             <div class="panel-body"></div>
           </div> --> 
-          <h2 class="h3 text-muted top-zero">{{ user.username }}'s work today</h2>
-          {% for i in range(done_list.tasks|length) %}
-          {% if i != edit_no %}
-            <ul class="bg-success">
-              <li>
+            <h2 class="h3 text-muted top-zero">{{ user.username }}'s work today</h2>
+            <ul class="list-group">
+              {% for i in range(done_list.tasks|length) %}
+              {% if i != edit_no %}
+              <li class="list-group-item success-border">
                 <a href="/_edit?task={{ i }}" class="pull-right grey-link right-space">edit</a>
-                <p class="h4">{{ done_list.tasks[i] }}</p>
+                <p class="lead no-margin">{{ done_list.tasks[i] }}</p>
               </li>
+              {% endif %}
+              {% endfor %}
             </ul>
-            {% endif %}
-          {% endfor %}
         </div><!-- /.col-md-12 -->
       </div><!-- /.row -->
       {% endif %}

@@ -17,12 +17,14 @@
 	      <!-- Trying date label instead. -->
 	      <!-- <p class="navbar-text">{{ now }}</p> -->
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><img src="/img?img_id={{ user.key() }}&dimensions=32x32" class="navbar-img"></li>
-	        <li><a href="/{{ user.username }}">{{ user.username }}</a></li>
-			    <li><!-- <a href="/signout">Sign Out</a> -->
-	          <form method="post" action="/signout" class="form-inline navbar-from navbar-right">
-	              <input type="submit" class="btn btn-link navbar-button link-align" name = "signout" value="Sign Out" />
-	          </form>
+			<li>
+			<img src="/img?img_id={{ user.key() }}&dimensions=32x32" class="navbar-img pull-left">
+			<a href="/{{ user.username }}">{{ user.username }}</a>
+			</li>
+	       	<!-- <a href="/signout">Sign Out</a> -->
+	        <form method="post" action="/signout" class="form-inline navbar-from navbar-right">
+	            <input type="submit" class="btn btn-link navbar-button link-align" name = "signout" value="Sign Out" />
+	        </form>
 	        </li>
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
