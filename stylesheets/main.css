@@ -120,8 +120,8 @@
 	/*background-color: #145414;*/
 	background-color: #444C38
 ;
-	padding-top: 30px;
-	padding-bottom: 30px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 .bottom-0 {
@@ -153,6 +153,10 @@
 .user-heading {
 	padding-top: 15px;
 	padding-bottom: 15px;
+}
+
+.user-image {
+	padding-right: 0;
 }
 
 
