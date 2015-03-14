@@ -7,9 +7,37 @@ import re
 import string
 
 from google.appengine.ext import db
+from google.appengine.api import images
 from google.appengine.api import memcache
 from pytz.gae import pytz
 from secret import *
+
+
+def is_img_square(img):
+	img = images.Image(img)
+	if img.width == img.height:
+		return True
+	else:
+		return False
+
+
+def img_square_ratios(img):
+	"""Output is in form of width ratio, height ratio."""
+	img = images.Image(img)
+	if img.width > img.height:
+		cropped_width = float(img.height)/float(img.width)
+		left_x = (1.0 - cropped_width)/2.0
+		right_x = 1.0 - left_x
+		top_y = 0.0
+		bottom_y = 1.0
+	elif img.height > img.width:
+		cropped_height = float(img.width)/float(img.height)
+		top_y = (1.0 - cropped_height)/2.0
+		bottom_y = 1.0 - top_y
+		left_x = 0.0
+		right_x = 1.0
+	return left_x, top_y, right_x, bottom_y
+
 
 
 def date_to_date_key(date_object):

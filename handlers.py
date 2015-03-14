@@ -296,12 +296,26 @@ class EditHandler(ParentHandler):
 class ImageHandler(ParentHandler):
 
 	def get(self):
-		user = db.get(self.request.get('img_id'))
+		img_id = self.request.get('img_id')
+		user = db.get(img_id)
 		dimensions = self.request.get('dimensions')
 		width, height = dimensions and [int(x) for x in dimensions.split('x')]
 		if user:
 			logging.error(images.Image(user.profile_picture).width)
-			avatar = images.resize(user.profile_picture, width, height)
+			img = user.profile_picture
+			if not is_img_square(img):
+				img_square = memcache.get(img_id) # because crop slows loading
+				if not img_square:
+					ratios = img_square_ratios(img)
+					img = images.crop(img,
+									  ratios[0],
+									  ratios[1],
+									  ratios[2],
+									  ratios[3])
+					set_cache(img_id, img) # because crop slows loading
+				else:
+					img = img_square
+			avatar = images.resize(img, width, height)
 			self.response.headers['Content-Type'] = 'image/png'
 			self.write(avatar)
 		else:
