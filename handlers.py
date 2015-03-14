@@ -110,9 +110,6 @@ class ParentHandler(Handler):
 							 edit_task_content = edit_task_content,
 							 error = error)
 
-
-class MainPage(ParentHandler):
-
 	def write_login_form(self, email = "",
 							   username = "",
 							   fullname = "",
@@ -123,11 +120,15 @@ class MainPage(ParentHandler):
 				   							  "fullname_error": "",
 				     						  "profile_picture_error": ""}):
 
-		self.render_template('login.html', 
+		self.render_template('login.html',
+							 title = "Spacecom Workday",
 							 email = email,
 							 username = username,
 							 fullname = fullname,
 							 all_errors = all_errors)
+
+
+class MainPage(ParentHandler):
 
 	def get(self):
 		if not self.logged_in_user:
@@ -178,22 +179,6 @@ class LoginHandler(ParentHandler):
 
 
 class SignupHandler(ParentHandler):
-
-	def write_login_form(self, email = "",
-							   username = "",
-							   fullname = "",
-							   all_errors  = {"username_error": "",
-				   							  "password_error": "",
-				   							  "signup_error": "",
-				   							  "email_error": "",
-				   							  "fullname_error": "",
-				     						  "profile_picture_error": ""}):
-
-		self.render_template('login.html', 
-							 email = email,
-							 username = username,
-							 fullname = fullname,
-							 all_errors = all_errors)
 
 	def get(self):
 		self.redirect('/')

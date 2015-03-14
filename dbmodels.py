@@ -146,7 +146,7 @@ class User(db.Model):
 
 
 class DoneList(db.Model):
-	"""Datastore entity for each item in the Done List."""
+	"""Datastore entity for the Done List."""
 
 	tasks = db.ListProperty(db.Text)
 	user_id = db.IntegerProperty()
@@ -217,4 +217,59 @@ class DoneList(db.Model):
 	def edit(self, task_index, task):
 		self.tasks[task_index] = db.Text(task)
 		return self
+
+
+class TodoList(db.Model):
+	"""Datastore entity for the Todo List."""
+
+	content = db.ListProperty(db.Text, required = True)
+	user_id = db.IntegerProperty()
+	timestamps = db.ListProperty(datetime.datetime)
+	company = db.StringProperty(default = DEFAULT_COMPANY)
+
+	@classmethod
+	def get_todo_list(cls, user):
+		todo_list = memcache.get(user.username + '/todo')
+		if not todo_list:
+			todo_list = cls.by_user(user)
+			if todo_list:
+				todo_list.set_todo_list_cache()
+		return todo_list
+
+	@classmethod
+	def by_user(cls, user):
+		logging.error('DB Query Todo List')
+		todo_list = cls.all().ancestor(user).get()
+		return todo_list
+
+	@classmethod
+	def construct(cls, user, content):
+		"""Constructs the TodoList and returns it without putting it."""
+		timestamp = timezone_now()
+		return cls(parent = user,
+				   key_name = user.username + '/todo',
+				   content = [db.Text(content)],
+				   user_id = user.key().id(),
+				   timestamps = [timestamp])
+
+	def set_todo_list_cache(self):
+		set_cache(self.key().name(), self)
+
+	def render_content(self, version = -1):
+		"""
+		version: integer
+		"""
+		render_text = self.content[version].replace('\n', '<br>')
+		return render_text
+
+	def update(self, content):
+		timestamp = timezone_now()
+		self.content.append(db.Text(content))
+		self.timestamps.append(timestamp)
+		return self
+
+
+
+
+
 

@@ -1,0 +1,16 @@
+{% extends "todo.html" %}
+{% block function %}
+<form method="post" class="alert-margin-top">
+	<div class="form-group">
+		<textarea class="form-control" rows="15" name="todo_content">{% if todo_list %}{{ todo_list.content[-1] }}{% endif %}</textarea>
+	</div>
+	{% if error %}
+		<div class="alert alert-danger alert-padding" role="alert">
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<span class="sr-only">Error:</span>
+			{{ error }}
+		</div>
+	{% endif %}
+	<input type="submit" name="add_content" value="Save" class="btn btn-warning pull-right" />
+</form>
+{% endblock %}

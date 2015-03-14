@@ -1,0 +1,42 @@
+{% extends "header.html" %}
+{% block body %}
+<div class="container">
+<!-- Code for the design dad prefers -->
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-6">
+        <!-- Using active colored buttons instead. -->
+        <ul class="nav nav-pills warning">
+            <li role="InputDoneList"><a class="org-nav-pill" href="/">Done List</a></li>
+            <li role="presentation" class="active"><a class="bg-org-pill" href="/todo">To Do List</a></li>
+        </ul>
+        <!-- <a href="/" class="btn btn-success active" role="button"><b>Done List</b></a>
+        <a href="/todo" class="btn btn-warning" role="button">To Do List</a> -->
+      	</div><!-- /.col-md-6 -->
+        <div class="col-md-6">
+          <h4 class="no-margin pull-right"><span class="label label-default">{{ now }}</span></h4>
+        </div><!-- /.col-md-6 -->
+      </div><!-- /.row -->
+      <div class="row">
+        <div class="col-md-12">
+          {% block function %}
+          {% endblock %}
+        </div><!-- /.col-md-12 -->
+      </div><!-- /.row -->
+    </div><!-- /.col-md-8 -->
+  	<div class="col-md-4">
+     <div class="panel panel-default">
+        <div class="panel-heading">Team @ Spacecom</div>
+        <div class="panel-body">
+          {% for this_user in group_users %}
+            {% if this_user.username != user.username %}
+              <li><a href="/{{ this_user.username }}">{{ this_user.username }}</a></li>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div> 
+    </div><!-- /.col-md-4 -->
+  </div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

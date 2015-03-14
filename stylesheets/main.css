@@ -57,14 +57,24 @@
 	margin-top: 0;
 }
 
-.nav-pills>li.active>a,
-.nav-pills>li.active>a:focus,
-.nav-pills>li.active>a:hover {
+.nav-pills>li.active>a.bg-green-pill,
+.nav-pills>li.active>a.bg-green-pill:focus,
+.nav-pills>li.active>a.bg-green-pill:hover {
 	background-color: #5cb85c;
 }
 
 .green-nav-pill {
 	color: #5cb85c;
+}
+
+.nav-pills>li.active>a.bg-org-pill,
+.nav-pills>li.active>a.bg-org-pill:focus,
+.nav-pills>li.active>a.bg-org-pill:hover {
+	background-color: #f0ad4e;
+}
+
+.org-nav-pill {
+	color: #f0ad4e;
 }
 
 .link-align {
@@ -159,4 +169,7 @@
 	padding-right: 0;
 }
 
+.top-10 {
+	margin-top: 10px;
+}
 
