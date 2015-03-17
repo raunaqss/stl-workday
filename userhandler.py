@@ -23,6 +23,7 @@ class UserHandler(ParentHandler):
 				date_key = date_to_date_key(timezone_now().date())
 			user_done_list = DoneList.get_done_list(username, date_key)
 			this_user = User.get_user(username)
+			user_todo_list = TodoList.get_todo_list(this_user)
 			self.render_template('profile.html',
 				title = username,
 				user = self.logged_in_user,
