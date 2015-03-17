@@ -223,11 +223,22 @@ class SignupHandler(ParentHandler):
 											 fullname,
 											 password,
 											 profile_picture)
-					new_user.put()
-					new_user.set_user_caches()
-					memcache.delete('Spacecom') # del obsolete group cache
-					self.login(new_user)
-					self.redirect('/')
+					try:
+						new_user.put()
+					except Exception as e:
+						logging.error(e)
+						all_errors[
+						'profile_picture_error'
+						] = ("Image should be less 1MB. Sorry!")
+						self.write_login_form(email = email,
+										  	  username = username,
+										  	  fullname = fullname,
+										  	  all_errors = all_errors)
+					else:
+						new_user.set_user_caches()
+						memcache.delete('Spacecom') # del obsolete group cache
+						self.login(new_user)
+						self.redirect('/')
 
 
 class SignoutHandler(ParentHandler):
@@ -297,7 +308,10 @@ class ImageHandler(ParentHandler):
 									  ratios[1],
 									  ratios[2],
 									  ratios[3])
-					set_cache(img_id, img) # because crop slows loading
+					try:
+						set_cache(img_id, img) # because crop slows loading
+					except:
+						pass
 				else:
 					img = img_square
 			avatar = images.resize(img, width, height)
