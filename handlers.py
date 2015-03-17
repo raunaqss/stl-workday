@@ -102,6 +102,7 @@ class ParentHandler(Handler):
 			edit_task_content = done_list.tasks[edit_no]
 			# logging.error('edit_task_content = ' + edit_task_content)
 		self.render_template("dashboard-" + function + ".html",
+							 title = "Spacecom Workday",
 							 now = date_string(timezone_now()),
 							 user = self.logged_in_user,
 							 group_users = group_users,
