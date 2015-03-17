@@ -5,6 +5,7 @@ import logging
 import random
 import re
 import string
+import sys
 
 from google.appengine.ext import db
 from google.appengine.api import images
@@ -188,6 +189,14 @@ def valid_email(email):
     return EMAIL_RE.match(email)
 
 
+def valid_image(image):
+	if sys.getsizeof(image) < 950000:
+		return True
+	else:
+		return False
+
+
+
 def validate_signup(username, email, fullname, password, profile_picture):
 	all_errors  = {"username_error": "",
 				   "password_error": "",
@@ -211,6 +220,10 @@ def validate_signup(username, email, fullname, password, profile_picture):
 		all_errors[
 		"profile_picture_error"
 		] = "Please upload a Profile Picture."
+	elif not valid_image(profile_picture):
+		all_errors[
+		"profile_picture_error"
+		] = "Image should be less 1MB. Sorry!"
 		valid_entries = False
 	if valid_entries:
 		if not "@spacecom.in" in email:
