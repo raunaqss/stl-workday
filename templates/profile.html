@@ -51,9 +51,45 @@
 </div>
 <div class="container">
 	<div class="row">
-		<div class="col-md-3"></div>
+		<div class="col-md-3">
+			<ul class="nav nav-pills nav-stacked top-15">
+				<li class="active">
+					<a class="green-pills" data-toggle="tab" href="#sectionDone">Done List</a>
+				</li>
+				<li>
+					<a class="orange-pills" data-toggle="tab" href="#sectionTodo">Current Todo</a>
+				</li>
+			</ul>
+		</div>
 		<div class="col-md-9">
-		<ul class="list-group top-15">
+			<div class="tab-content">
+				<div id="sectionDone" class="tab-pane fade in active">
+					<ul class="list-group top-15">
+						{% for i in range(user_done_list.tasks|length) %}
+						<li class="list-group-item success-border">
+							{% if end_date in user_done_list.key().name() %}
+							{% if this_user.username == user.username %}
+							<a href="/_edit?task={{ i }}" class="pull-right grey-link right-space">edit</a>
+							{% endif %}
+							{% endif %}
+							<p class="lead">{{ user_done_list.tasks[i] }}</p>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div id="sectionTodo" class="tab-pane fade">
+					{% if user_todo_list %}
+					<div class="panel panel-warning top-15">
+						<div class="panel-heading h3 no-margin">todo{% if this_user.username == user.username %}<a href="/todo/_edit" class="small pull-right top-10">edit</a>{% endif %}
+						</div>
+						<div class="panel-body">
+						<p class="lead no-margin">{{ user_todo_list.render_content() | safe }}</p>
+						</div>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+		<!-- <ul class="list-group top-15">
 			{% for i in range(user_done_list.tasks|length) %}
 				<li class="list-group-item success-border">
 					{% if end_date in user_done_list.key().name() %}
@@ -64,7 +100,7 @@
 					<p class="lead">{{ user_done_list.tasks[i] }}</p>
 				</li>
 			{% endfor %}
-		</ul>
+		</ul> -->
 		</div>
 	</div><!-- /.row -->
 </div>

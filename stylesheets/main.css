@@ -57,26 +57,6 @@
 	margin-top: 0;
 }
 
-.nav-pills>li.active>a.bg-green-pill,
-.nav-pills>li.active>a.bg-green-pill:focus,
-.nav-pills>li.active>a.bg-green-pill:hover {
-	background-color: #5cb85c;
-}
-
-.green-nav-pill {
-	color: #5cb85c;
-}
-
-.nav-pills>li.active>a.bg-org-pill,
-.nav-pills>li.active>a.bg-org-pill:focus,
-.nav-pills>li.active>a.bg-org-pill:hover {
-	background-color: #f0ad4e;
-}
-
-.org-nav-pill {
-	color: #f0ad4e;
-}
-
 .link-align {
 	padding: 14px 12px;
 }
@@ -171,5 +151,40 @@
 
 .top-10 {
 	margin-top: 10px;
+}
+
+.nav-pills>li.active>a.green-pills,
+.nav-pills>li.active>a.green-pills:focus,
+.nav-pills>li.active>a.green-pills:hover {
+	color: white;
+	background-color: #5cb85c;
+}
+
+.nav-pills>li>a.green-pills {
+	/* green pill has orange color unhovered*/
+	color: #f0ad4e; 
+}
+
+.nav-pills>li>a.green-pills:hover {
+	color: #5cb85c;
+	background-color: #dff0d8;
+
+}
+
+.nav-pills>li.active>a.orange-pills,
+.nav-pills>li.active>a.orange-pills:focus,
+.nav-pills>li.active>a.orange-pills:hover {
+	color: white;
+	background-color: #f0ad4e;
+}
+
+.nav-pills>li>a.orange-pills {
+	/*oragne pill has green color unhovered*/
+	color: #5cb85c;
+}
+
+.nav-pills>li>a.orange-pills:hover {
+	color: #f0ad4e;
+	background-color: #fcf8e3;
 }
 

@@ -1,7 +1,7 @@
 {% extends "todo.html" %}
 {% block function %}
 <div class="panel panel-warning alert-margin-top">
-	<div class="panel-heading h3 no-margin">todo{% if function != "edit" %}<a href="/todo/_edit" class="small pull-right top-10">edit</a>{% endif %}
+	<div class="panel-heading h3 no-margin">todo<a href="/todo/_edit" class="small pull-right top-10">edit</a>
 	</div>
 	<div class="panel-body">
 	  <p class="lead no-margin">{{ todo_list.render_content() | safe }}</p>
