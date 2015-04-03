@@ -11,6 +11,7 @@ from dbmodels import *
 from google.appengine.ext import db
 from google.appengine.api import images
 from google.appengine.api import memcache
+from google.appengine.api import mail
 
 
 # initializing jinja2
@@ -128,14 +129,23 @@ class ParentHandler(Handler):
 							 fullname = fullname,
 							 all_errors = all_errors)
 
+	def write_verify_page(self):
+		self.render_template('verify.html',
+							 title = "Spacecom Workday",
+							 user = self.logged_in_user)
+
 
 class MainPage(ParentHandler):
 
 	def get(self):
-		if not self.logged_in_user:
-			self.write_login_form()
+		if self.logged_in_user:
+			if self.logged_in_user.verified:
+				self.write_dashboard()
+			else:
+				self.write_verify_page()
 		else:
-			self.write_dashboard()
+			self.write_login_form()
+
 
 	def post(self):
 		if self.logged_in_user:
@@ -226,6 +236,7 @@ class SignupHandler(ParentHandler):
 											 profile_picture)
 					new_user.put()
 					new_user.set_user_caches()
+					new_user.send_confirmation_mail()
 					memcache.delete('Spacecom') # del obsolete group cache
 					self.login(new_user)
 					self.redirect('/')
@@ -246,35 +257,45 @@ class SignoutHandler(ParentHandler):
 class EditHandler(ParentHandler):
 
 	def get(self):
-		task_index = self.request.get('task')
-		self.write_dashboard("edit",
-							 "",
-							 int(task_index))
+		if self.logged_in_user:
+			if self.logged_in_user.verified:
+				task_index = self.request.get('task')
+				self.write_dashboard("edit",
+									 "",
+									 int(task_index))
+			else:
+				self.write_verify_page()
+		else:
+			self.redirect('/')
 
 	def post(self):
 		if self.logged_in_user:
-			edit_task = self.request.get('edit_task')
-			delete_task = self.request.get('delete_task')
-			# logging.error('edit_task = ' + edit_task)
-			# logging.error('delete_task = ' + delete_task)
-			done_list = DoneList.todays_done_list(self.logged_in_user.username)
-			if edit_task:
-				done_task = self.request.get('done_task')
-				if done_task:
-					done_list = done_list.edit(int(edit_task), done_task)
+			if self.logged_in_user.verified:
+				edit_task = self.request.get('edit_task')
+				delete_task = self.request.get('delete_task')
+				# logging.error('edit_task = ' + edit_task)
+				# logging.error('delete_task = ' + delete_task)
+				done_list = DoneList.todays_done_list(
+					self.logged_in_user.username)
+				if edit_task:
+					done_task = self.request.get('done_task')
+					if done_task:
+						done_list = done_list.edit(int(edit_task), done_task)
+						done_list.put()
+						done_list.set_done_list_cache()
+						self.redirect('/')
+					else:
+						error = "Task Required!"
+						self.write_dashboard("edit",
+											 error,
+											 int(edit_task))
+				elif delete_task:
+					done_list = done_list.del_task(int(delete_task))
 					done_list.put()
 					done_list.set_done_list_cache()
 					self.redirect('/')
-				else:
-					error = "Task Required!"
-					self.write_dashboard("edit",
-										 error,
-										 int(edit_task))
-			elif delete_task:
-				done_list = done_list.del_task(int(delete_task))
-				done_list.put()
-				done_list.set_done_list_cache()
-				self.redirect('/')
+			else:
+				self.write_verify_page()
 		else:
 			self.redirect('/')
 		

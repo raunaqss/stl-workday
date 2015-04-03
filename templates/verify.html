@@ -1,0 +1,21 @@
+{% extends "header.html" %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-danger">
+				<div class="panel-body">
+					<p class="lead pull-left">
+						You will have to confirm your email address before you can use Spacecom Workday.
+					</p>
+					<form action="/verify" method="post" class="pull-right">
+						<button type="submit" class="btn btn-link no-padding" name="sendmail" value="Yes">
+							<p class="lead">Send confirmation mail again.</p>
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

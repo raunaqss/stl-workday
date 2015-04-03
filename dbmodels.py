@@ -3,6 +3,7 @@ import logging
 import string
 
 from google.appengine.ext import db
+from google.appengine.api import mail
 from google.appengine.api import memcache
 from pytz.gae import pytz
 from utils import *
@@ -28,6 +29,7 @@ class User(db.Model):
 	company = db.StringProperty(default = DEFAULT_COMPANY)
 	timezone = db.StringProperty(default = DEFAULT_TIMEZONE)
 	date_created = db.DateTimeProperty() # in user's timezone
+	verified = db.BooleanProperty(default = False)
 
 	@classmethod
 	def get_group_users(cls, group = 'Spacecom'):
@@ -143,6 +145,21 @@ class User(db.Model):
 		set_cache(self.username, self)
 		set_cache(str(self.key().id()), self)
 		set_cache(self.email, self)
+
+	def send_confirmation_mail(self):
+		confirmation_url = 'http://stl-workday.appspot.com/verify/%s' % (
+			self.key())
+		sender = 'Spacecom Workday <verify@stl-workday.appspotmail.com>'
+		user_address = '%s <%s>' % (self.fullname, self.email)
+		subject = 'Hello %s! Confirm your email address please.' % (
+			self.username)
+		body = ('Hi %s!\n\n'
+				'Thank you for creating an account on Spacecom Workday!'
+				'\nPlease confirm your email address by clicking on the '
+				'following link:\n\n%s' % (self.fullname.split(' ')[0],
+					confirmation_url))
+		mail.send_mail(sender, user_address, subject, body)
+
 
 
 class DoneList(db.Model):
