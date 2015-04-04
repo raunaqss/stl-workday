@@ -173,20 +173,56 @@ class MainPage(ParentHandler):
 
 class LoginHandler(ParentHandler):
 
+	def write_login_form(self,
+						 username_or_email = "",
+						 login_error = "",
+						 reset_msg = ""):
+		self.render_template('login-only.html',
+							 username_or_email = username_or_email,
+							 login_error = login_error,
+							 reset_msg = reset_msg)
+
+
 	def get(self):
-		self.redirect('/')
+		# self.redirect('/')
+		if not self.logged_in_user:
+			self.write_login_form()
+		else:
+			self.redirect('')
 
 	def post(self):
 		signin = self.request.get('signin')
+		forgot = self.request.get('forgot')
+		username_or_email = self.request.get('username_or_email')
 		if signin == "Sign In":
-			username_or_email = self.request.get('username_or_email')
 			password = self.request.get('password')
 			user = User.valid_login(username_or_email, password)
 			if user:
 				self.login(user)
 				self.redirect('/')
 			else:
-				self.redirect('/') # this is temporary
+				login_error = "Email/Username or Password is incorrect."
+				self.write_login_form(username_or_email = username_or_email,
+									  login_error = login_error)
+		elif forgot == "Forgot Password":
+			if not username_or_email:
+				login_error = "Enter Username or Email to reset password."
+				self.write_login_form(username_or_email = username_or_email,
+									  login_error = login_error)
+			else:
+				user = User.get_user(username_or_email)
+				if user:
+					user.send_pw_reset_mail()
+					reset_msg = ("Password reset link sent to registered " 
+								 "email address.")
+					self.write_login_form(
+						username_or_email = username_or_email,
+						reset_msg = reset_msg)
+				else:
+					login_error = "User does not exist."
+					self.write_login_form(
+						username_or_email = username_or_email,
+						login_error = login_error)
 
 
 class SignupHandler(ParentHandler):

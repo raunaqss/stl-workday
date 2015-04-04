@@ -192,3 +192,13 @@
 	padding: 0;
 }
 
+.top-70 {
+	margin-top: 70px;
+}
+
+.panel-link,
+.panel-link:hover {
+	color: #333;
+	text-decoration: none;
+}
+

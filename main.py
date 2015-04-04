@@ -17,6 +17,7 @@ application = webapp2.WSGIApplication([
     (r'^/signup/?$', SignupHandler),
     (r'^/signout/?$', SignoutHandler),
     (r'^/todo/?(_edit)?/?$', TodoHandler),
+    (r'^/reset/?([a-zA-Z0-9-_]+)?/?$', ResetHandler),    
     (r'^/verify/?([a-zA-Z0-9-_]+)?/?$', VerifyHandler),
     (r'^/([a-zA-Z][a-zA-Z0-9_-]{3,20})/?$', UserHandler)
 ], debug=True)

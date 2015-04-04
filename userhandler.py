@@ -57,4 +57,36 @@ class VerifyHandler(ParentHandler):
 		if sendmail == "Yes":
 			self.logged_in_user.send_confirmation_mail()
 			self.redirect('/')
+
+
+class ResetHandler(ParentHandler):
+
+	def write_reset_form(self, pwd_error = "", reset_msg = ""):
+		self.render_template('reset.html',
+							 pwd_error = pwd_error,
+							 reset_msg = reset_msg)
+
+	def get(self, user_key):
+		self.write_reset_form()
+
+	def post(self, user_key):
+		reset = self.request.get('reset')
+		password = self.request.get('password')
+		password_again = self.request.get('password_again')
+		if password != password_again:
+			pwd_error = "Passwords don't match."
+			self.write_reset_form(pwd_error = pwd_error)
+		elif not valid_password(password):
+			pwd_error = "That's not a valid password."
+			self.write_reset_form(pwd_error = pwd_error)
+		else:
+			logging.error(user_key)
+			user = db.get(user_key)
+			user.reset_pw(password)
+			user.put()
+			user.set_user_caches()
+			user.send_reset_success_mail()
+			reset_msg = "Password reset successful."
+			self.write_reset_form(reset_msg = reset_msg)
+
 			

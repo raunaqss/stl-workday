@@ -146,6 +146,9 @@ class User(db.Model):
 		set_cache(str(self.key().id()), self)
 		set_cache(self.email, self)
 
+	def reset_pw(self, pw):
+		self.pw_hash = make_pw_hash(self.username, pw)
+
 	def send_confirmation_mail(self):
 		confirmation_url = 'http://stl-workday.appspot.com/verify/%s' % (
 			self.key())
@@ -160,6 +163,25 @@ class User(db.Model):
 					confirmation_url))
 		mail.send_mail(sender, user_address, subject, body)
 
+	def send_pw_reset_mail(self):
+		reset_url = 'http://stl-workday.appspot.com/reset/%s' % (self.key())
+		sender = 'Spacecom Workday <verify@stl-workday.appspotmail.com>'
+		user_address = '%s <%s>' % (self.fullname, self.email)
+		subject = 'Hello %s! Your password reset link.' % self.username
+		body = ('Hi %s!\n\n'
+				'You can reset your password on the following link:\n\n%s' % (
+					self.fullname.split(' ')[0],
+					reset_url))
+		mail.send_mail(sender, user_address, subject, body)
+
+	def send_reset_success_mail(self):
+		sender = 'Spacecom Workday <verify@stl-workday.appspotmail.com>'
+		user_address = '%s <%s>' % (self.fullname, self.email)
+		subject = 'Hello %s! Your password has been reset.' % self.username
+		body = ('Hi %s!\n\n'
+				'Your password has been reset successfully!' % (
+					self.fullname.split(' ')[0]))
+		mail.send_mail(sender, user_address, subject, body)
 
 
 class DoneList(db.Model):
