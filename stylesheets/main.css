@@ -130,6 +130,11 @@
 	color: #d6e9c6;
 }
 
+a.light-green:hover {
+	color: #d6e9c6;
+	text-decoration: underline;
+}
+
 .header-input {
 	background-color: inherit;
 	border-color: #d6e9c6;

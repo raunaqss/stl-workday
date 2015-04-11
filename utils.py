@@ -44,6 +44,8 @@ def img_square_ratios(img):
 def date_to_date_key(date_object):
 	return date_object.strftime('%d-%m-%Y')
 
+def date_key_to_date(date_key):
+	return datetime.datetime.strptime(date_key, '%d-%m-%Y').date()
 
 def done_list_key(username, date_object):
 	return username + '/' + date_object.strftime('%d-%m-%Y')

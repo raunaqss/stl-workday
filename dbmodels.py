@@ -241,6 +241,20 @@ class DoneList(db.Model):
 				   user_id = user.key().id(),
 				   tz_date = tz_date)
 
+	@classmethod
+	def prev_date_key(cls, user, date_key):
+		prev_key = memcache.get(user.username + '/before/' + date_key)
+		if not prev_key:
+			logging.error('DB Query prev list')
+			prev_done_list = cls.all().ancestor(user)
+			prev_done_list.filter("tz_date <",
+								  date_key_to_date(date_key)).order("-tz_date")
+			prev_done_list = prev_done_list.get()
+			if prev_done_list:
+				prev_key = date_to_date_key(prev_done_list.tz_date)
+				set_cache(user.username + '/before/' + date_key, prev_key)
+		return prev_key
+
 	def update(self, task):
 		"""Updates itself with the given task without putting it to the db."""
 		self.tasks.append(db.Text(task))

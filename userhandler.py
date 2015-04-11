@@ -24,6 +24,7 @@ class UserHandler(ParentHandler):
 					date_key = date_to_date_key(timezone_now().date())
 				user_done_list = DoneList.get_done_list(username, date_key)
 				this_user = User.get_user(username)
+				prev_date_key = DoneList.prev_date_key(this_user, date_key)
 				user_todo_list = TodoList.get_todo_list(this_user)
 				self.render_template('profile.html',
 					title = username,
@@ -33,7 +34,8 @@ class UserHandler(ParentHandler):
 					start_date = date_to_date_key(this_user.date_created),
 					end_date = date_to_date_key(timezone_now().date()),
 					user_done_list = user_done_list,
-					user_todo_list = user_todo_list)
+					user_todo_list = user_todo_list,
+					prev_date_key = prev_date_key)
 			else:
 				self.write_verify_page()
 		else:

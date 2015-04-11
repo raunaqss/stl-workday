@@ -33,6 +33,9 @@
 					</div>
 				</div>
 				<input type="submit" class="btn btn-success pull-right" value="View" />
+				{% if prev_date_key %}
+				<a class="btn btn-link light-green pull-right del-right-margin" href="/{{ this_user.username }}?date={{ prev_date_key }}"><span aria-hidden="true">&larr;</span> Previous</a>
+				{% endif %}
 			</form>
 			<script type="text/javascript">
 				$(document).ready(function($) {
